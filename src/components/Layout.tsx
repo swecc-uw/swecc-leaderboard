@@ -49,6 +49,7 @@ interface LayoutProps {
 interface NavLinkProps {
   to: string;
   children: React.ReactNode;
+  onClose: () => void;
 }
 
 interface NavBarProps {
@@ -141,10 +142,14 @@ const Navbar: React.FC<NavBarProps> = ({
   const NavLinks = () => (
     <>
       {isAuthenticated && isVerified && (
-        <NavLink to="/directory">Directory</NavLink>
+        <NavLink onClose={onClose} to="/directory">
+          Directory
+        </NavLink>
       )}
       {isAdmin && isAuthenticated && (
-        <NavLink to="/admin">Admin Dashboard</NavLink>
+        <NavLink onClose={onClose} to="/admin">
+          Admin Dashboard
+        </NavLink>
       )}
 
       {!isAuthenticated && (
@@ -159,6 +164,7 @@ const Navbar: React.FC<NavBarProps> = ({
             px={6}
             bg={buttonBg}
             color={buttonColor}
+            onClick={onClose}
             _hover={{
               transform: 'translateY(-2px)',
               bg: 'green.600',
@@ -167,7 +173,9 @@ const Navbar: React.FC<NavBarProps> = ({
           >
             Join SWECC
           </Button>
-          <NavLink to="/auth">Join the leaderboard</NavLink>
+          <NavLink onClose={onClose} to="/auth">
+            Join the leaderboard
+          </NavLink>
         </>
       )}
     </>
@@ -180,6 +188,7 @@ const Navbar: React.FC<NavBarProps> = ({
           as="span"
           display="flex"
           alignItems="center"
+          onClick={onClose}
           position="relative"
           p={2}
           borderRadius="md"
@@ -246,7 +255,7 @@ const Navbar: React.FC<NavBarProps> = ({
   );
 };
 
-const NavLink: React.FC<NavLinkProps> = ({ to, children }) => {
+const NavLink: React.FC<NavLinkProps> = ({ to, children, onClose }) => {
   const linkColor = useColorModeValue('gray.600', 'gray.300');
   const hoverColor = useColorModeValue('blue.500', 'blue.300');
 
@@ -260,6 +269,7 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children }) => {
           color: hoverColor,
           textDecoration: 'none',
         }}
+        onClick={onClose}
         transition="color 0.2s"
       >
         {children}

@@ -112,7 +112,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, type, orderBy }) => {
   };
 
   return (
-    <Box borderWidth="1px" borderRadius="xl" overflow="hidden" bg="white">
+    <Box borderWidth="1px" borderRadius="xl" overflow="scroll" bg="white">
       <Table variant="simple">
         <Thead bg="white">
           <Tr>
@@ -123,7 +123,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, type, orderBy }) => {
                 borderBottomWidth="1px"
                 borderBottomColor="gray.200"
                 color="gray.600"
-                fontSize="sm"
+                fontSize="xs"
               >
                 <Flex align="center" gap={2}>
                   {header.label}
@@ -147,6 +147,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, type, orderBy }) => {
                   key={`${row.username}-${header.key}`}
                   py={4}
                   borderBottomColor="gray.100"
+                  fontSize={header.key === 'username' ? 'sm' : 'xs'}
                 >
                   {Cell({ ...row, rank: index + 1 }, header, isGitHub)}
                 </Td>
