@@ -48,7 +48,7 @@ export function getLeetcodeLeaderboard(
   orderBy: LeetCodeOrderBy = LeetCodeOrderBy.Total
 ): Promise<LeetCodeStats[]> {
   return api
-    .get(`/leaderboard/leetcode/?orderBy=${orderBy}`)
+    .get(`/leaderboard/leetcode/?order_by=${orderBy}`)
     .then((res) => {
       if (res.status !== 200)
         throw new Error('Failed to get leetcode leaderboard');
@@ -61,7 +61,7 @@ export function getGitHubLeaderboard(
   orderBy: GitHubOrderBy = GitHubOrderBy.Commits
 ): Promise<GitHubStats[]> {
   return api
-    .get(`/leaderboard/github/?orderBy=${orderBy}`)
+    .get(`/leaderboard/github/?order_by=${orderBy}`)
     .then((res) => {
       if (res.status !== 200)
         throw new Error('Failed to get github leaderboard');
