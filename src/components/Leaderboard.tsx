@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Table,
   Thead,
@@ -11,47 +11,47 @@ import {
   Flex,
   Icon,
   Link,
-} from "@chakra-ui/react";
-import { ChevronUpIcon } from "@chakra-ui/icons";
+} from '@chakra-ui/react';
+import { ChevronUpIcon } from '@chakra-ui/icons';
 import {
   GitHubStats,
   LeetCodeStats,
   LeaderboardType,
   GitHubOrderBy,
   LeetCodeOrderBy,
-} from "../types";
-import { devPrint } from "./utils/RandomUtils";
+} from '../types';
+import { devPrint } from './utils/RandomUtils';
 
 const difficultyColor = (difficulty: string): string => {
   switch (difficulty.toLowerCase()) {
-    case "easy":
-      return "green.500";
-    case "medium":
-      return "yellow.500";
-    case "hard":
-      return "red.500";
+    case 'easy':
+      return 'green.500';
+    case 'medium':
+      return 'yellow.500';
+    case 'hard':
+      return 'red.500';
     default:
-      return "gray.500";
+      return 'gray.500';
   }
 };
 
 const headers = (isGitHub: boolean): Header[] => {
   if (isGitHub) {
     return [
-      { key: "rank", label: "Rank" },
-      { key: "username", label: "Username" },
-      { key: "totalCommits", label: "Commits" },
-      { key: "totalPrs", label: "PRs" },
-      { key: "followers", label: "Followers" },
+      { key: 'rank', label: 'Rank' },
+      { key: 'username', label: 'Username' },
+      { key: 'totalCommits', label: 'Commits' },
+      { key: 'totalPrs', label: 'PRs' },
+      { key: 'followers', label: 'Followers' },
     ];
   }
   return [
-    { key: "rank", label: "Rank" },
-    { key: "username", label: "Username" },
-    { key: "totalSolved", label: "Total" },
-    { key: "easySolved", label: "Easy" },
-    { key: "mediumSolved", label: "Medium" },
-    { key: "hardSolved", label: "Hard" },
+    { key: 'rank', label: 'Rank' },
+    { key: 'username', label: 'Username' },
+    { key: 'totalSolved', label: 'Total' },
+    { key: 'easySolved', label: 'Easy' },
+    { key: 'mediumSolved', label: 'Medium' },
+    { key: 'hardSolved', label: 'Hard' },
   ];
 };
 
@@ -85,28 +85,28 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, type, orderBy }) => {
     if (isGitHub) {
       switch (orderBy as GitHubOrderBy) {
         case GitHubOrderBy.Commits:
-          return "totalCommits";
+          return 'totalCommits';
         case GitHubOrderBy.Prs:
-          return "totalPrs";
+          return 'totalPrs';
         case GitHubOrderBy.Followers:
-          return "followers";
+          return 'followers';
         default:
-          return "";
+          return '';
       }
     } else {
       switch (orderBy as LeetCodeOrderBy) {
         case LeetCodeOrderBy.Total:
-          return "totalSolved";
+          return 'totalSolved';
         case LeetCodeOrderBy.Easy:
-          return "easySolved";
+          return 'easySolved';
         case LeetCodeOrderBy.Medium:
-          return "mediumSolved";
+          return 'mediumSolved';
         case LeetCodeOrderBy.Hard:
-          return "hardSolved";
+          return 'hardSolved';
         case LeetCodeOrderBy.Completion:
-          return "totalSolved";
+          return 'totalSolved';
         default:
-          return "";
+          return '';
       }
     }
   };
@@ -139,7 +139,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, type, orderBy }) => {
           {data.map((row, index) => (
             <Tr
               key={row.username}
-              _hover={{ bg: "gray.50" }}
+              _hover={{ bg: 'gray.50' }}
               transition="background 0.2s"
             >
               {headers(isGitHub).map((header) => (
@@ -165,13 +165,13 @@ const Cell = (row: Row, header: Header, isGitHub: boolean): React.ReactNode => {
       .map((h) => h.key)
       .includes(header.key)
   ) {
-    devPrint("Invalid header key:", header.key);
+    devPrint('Invalid header key:', header.key);
     return null;
   }
 
   const key = header.key as keyof Row;
 
-  if (key === "rank") {
+  if (key === 'rank') {
     return (
       <Text color="gray.700" fontWeight="medium">
         #{row.rank}
@@ -179,7 +179,7 @@ const Cell = (row: Row, header: Header, isGitHub: boolean): React.ReactNode => {
     );
   }
 
-  if (["easySolved", "mediumSolved", "hardSolved"].includes(key)) {
+  if (['easySolved', 'mediumSolved', 'hardSolved'].includes(key)) {
     return (
       <Text color={difficultyColor(header.label)} fontWeight="medium">
         {row[key]}
@@ -187,12 +187,12 @@ const Cell = (row: Row, header: Header, isGitHub: boolean): React.ReactNode => {
     );
   }
 
-  if (key === "username") {
+  if (key === 'username') {
     return (
       <Flex align="center" gap={2}>
         <Link
           href={`
-          ${isGitHub ? "https://github.com" : "https://leetcode.com"}/${
+          ${isGitHub ? 'https://github.com' : 'https://leetcode.com'}/${
             row.username
           }
         `}
@@ -202,7 +202,7 @@ const Cell = (row: Row, header: Header, isGitHub: boolean): React.ReactNode => {
         </Link>
         {row.rank <= 3 && (
           <Text fontSize="lg">
-            {row.rank === 1 ? "👑" : row.rank === 2 ? "🥈" : "🥉"}
+            {row.rank === 1 ? '👑' : row.rank === 2 ? '🥈' : '🥉'}
           </Text>
         )}
       </Flex>
