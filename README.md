@@ -1,14 +1,4 @@
-# SWECC Single Page App Template
-
-Template to create a react single page app with typescript and react. It comes with basic components for user authentication and layout/routing.
-
-## Using the template
-
-Do a project-wide search for "CHANGE_ME" and replace those values. Take note of the home page you choose when setting up a subdomain and deploying.
-
-Feel free to make changes to whatever you want in this repo. We'll try to minimize breaking API changes from this point onwards.
-
-We also recommend using the setting up branch protection rules in the repo and to enforce code reviews before merging.
+# SWECC Leaderboard
 
 | Command | Description |
 | --- | --- |

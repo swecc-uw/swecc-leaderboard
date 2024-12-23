@@ -50,3 +50,62 @@ export interface RawMemberData {
 export interface DetailedResponse {
   detail: string;
 }
+
+
+export interface RawGitHubStats {
+  user: {
+    username: string;
+  };
+  total_prs: number;
+  total_commits: number;
+  followers: number;
+  last_updated: string;
+}
+
+export interface GitHubStats {
+  username: string;
+  totalPrs: number;
+  totalCommits: number;
+  followers: number;
+  lastUpdated: Date;
+}
+
+export interface RawLeetCodeStats {
+  user: {
+    username: string;
+  };
+  total_solved: number;
+  easy_solved: number;
+  medium_solved: number;
+  hard_solved: number;
+  last_updated: string;
+}
+
+export interface LeetCodeStats {
+  username: string;
+  totalSolved: number;
+  easySolved: number;
+  mediumSolved: number;
+  hardSolved: number;
+  lastUpdated: Date;
+}
+
+export enum LeaderboardType {
+  LeetCode = 'leetcode',
+  GitHub = 'github',
+}
+
+export enum LeetCodeOrderBy {
+  Total = 'total',
+  Easy = 'easy',
+  Medium = 'medium',
+  Hard = 'hard',
+  Completion = 'completion',
+}
+
+export enum GitHubOrderBy {
+  Commits = 'commits',
+  Prs = 'prs',
+  Followers = 'followers',
+  Recent = 'recent',
+}

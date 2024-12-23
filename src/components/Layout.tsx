@@ -40,6 +40,7 @@ import {
   SWECC_EMAIL_LINK,
   SWECC_WEBSITE_LINK,
 } from '../constants';
+import SWECC_LOGO from '../assets/transp-swecc-logo.png';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -57,14 +58,15 @@ interface NavBarProps {
   isVerified: boolean;
 }
 
-const NO_REDIRECT_PATHS = ['/auth', '/join'];
+const NO_REDIRECT_PATHS = ['/auth', '/join', '/leaderboard', '/'];
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { isAuthenticated, isAdmin, loading, member, isVerified } = useAuth();
-
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  console.log('pathname', pathname);
+  const bgColor = useColorModeValue('gray.50', 'gray.800');
+  const navBg = useColorModeValue('white', 'gray.900');
+
   useEffect(() => {
     if (
       !loading &&
@@ -77,23 +79,49 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   if (loading) {
     return (
-      <Center h="100vh">
-        <Spinner />
+      <Center h="100vh" bg={bgColor}>
+        <VStack spacing={4}>
+          <Spinner size="xl" color="blue.500" thickness="4px" />
+          <Text color="gray.600">Loading...</Text>
+        </VStack>
       </Center>
     );
   }
 
   return (
-    <Flex direction="column" minHeight="100vh">
-      <Navbar
-        member={member}
-        isAuthenticated={isAuthenticated}
-        isAdmin={isAdmin}
-        isVerified={isVerified}
-      />
-      <Box as="main" flexGrow={1}>
-        <Container maxW="container.xl" py={8}>
-          {children}
+    <Flex direction="column" minHeight="100vh" bg={bgColor}>
+      <Box
+        as="nav"
+        bg={navBg}
+        boxShadow="md"
+        position="sticky"
+        top={0}
+        zIndex="sticky"
+        transition="all 0.2s"
+        _hover={{ boxShadow: 'lg' }}
+      >
+        <Container maxW="container.xl">
+          <Navbar
+            member={member}
+            isAuthenticated={isAuthenticated}
+            isAdmin={isAdmin}
+            isVerified={isVerified}
+          />
+        </Container>
+      </Box>
+
+      <Box as="main" flexGrow={1} position="relative">
+        <Container maxW="container.xl" py={8} px={{ base: 4, md: 8 }}>
+          <Box
+            bg="white"
+            borderRadius="lg"
+            boxShadow="sm"
+            p={{ base: 4, md: 6 }}
+            transition="all 0.2s"
+            _hover={{ boxShadow: 'md' }}
+          >
+            {children}
+          </Box>
         </Container>
       </Box>
       <Footer />
@@ -102,93 +130,137 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 };
 
 const Navbar: React.FC<NavBarProps> = ({
-  member,
   isAuthenticated,
   isAdmin,
   isVerified,
 }) => {
-  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const buttonBg = 'green.700'
+  const buttonColor = useColorModeValue('white', 'gray.800');
 
   const NavLinks = () => (
     <>
       {isAuthenticated && isVerified && (
+        <NavLink to="/directory">Directory</NavLink>
+      )}
+      {isAdmin && isAuthenticated && (
+        <NavLink to="/admin">Admin Dashboard</NavLink>
+      )}
+
+      {!isAuthenticated && (
         <>
-          <NavLink to="/directory">Directory</NavLink>
+          <Button
+            as={Link}
+            to="/join"
+            colorScheme="green"
+            size="md"
+            h="36px"
+            rounded={'md'}
+            px={6}
+            bg={buttonBg}
+            color={buttonColor}
+            _hover={{
+              transform: 'translateY(-2px)',
+              bg: 'green.600',
+            }}
+            transition="all 0.2s"
+          >
+            Join SWECC
+          </Button>
+          <NavLink to="/auth">Join the leaderboard</NavLink>
         </>
       )}
-      {isAdmin && <NavLink to="/admin">Admin Dashboard</NavLink>}
-      {!isAuthenticated && <NavLink to="/join">Join SWECC</NavLink>}
     </>
   );
 
   return (
-    <Box as="nav" boxShadow="sm" position="sticky" top={0} zIndex="sticky">
-      <Container maxW="container.xl" py={4}>
-        <Flex justify="space-between" align="center">
-          <Link to="/">
-            <ChakraLink as="span" _hover={{ textDecoration: 'none' }}>
-              <Text fontSize="2xl" fontWeight="bold" color="blue.500">
-                SWECC
-              </Text>
-            </ChakraLink>
-          </Link>
-
-          <HStack spacing={8} display={{ base: 'none', md: 'flex' }}>
-            <NavLinks />
-          </HStack>
-
-          <HStack>
-            {member && isAuthenticated ? (
-              <Button
-                colorScheme="brand"
-                onClick={() => navigate('/profile')}
-                variant="ghost"
-              >
-                {member.firstName?.length === 0
-                  ? 'Finish setting up your profile'
-                  : member.firstName}
-              </Button>
-            ) : (
-              <Button colorScheme="brand" onClick={() => navigate('/auth')}>
-                Sign in
-              </Button>
-            )}
-            <IconButton
-              display={{ base: 'flex', md: 'none' }}
-              colorScheme="brand"
-              onClick={onOpen}
-              icon={<HamburgerIcon />}
-              aria-label="Open menu"
-              variant="ghost"
+    <Flex justify="space-between" align="center" py={4} px={{ base: 4, md: 0 }}>
+      <Link to="/">
+        <ChakraLink
+          as="span"
+          display="flex"
+          alignItems="center"
+          position="relative"
+          p={2}
+          borderRadius="md"
+          transition="all 0.2s"
+          _hover={{
+            textDecoration: 'none',
+            bg: 'gray.200',
+          }}
+        >
+          <Box
+            position="relative"
+            height="42px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <img
+              src={SWECC_LOGO}
+              alt="SWECC Logo"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                filter: 'brightness(0.6) contrast(1.5)',
+              }}
             />
-          </HStack>
-        </Flex>
-      </Container>
+          </Box>
+          <Text
+            fontSize="45px"
+            fontWeight="bold"
+            fontFamily="monospace"
+            ml={4}
+            display={{ base: 'none', md: 'block' }}
+          >
+          <em>Leaderboard</em>
+          </Text>
+        </ChakraLink>
+      </Link>
+      <HStack spacing={8} display={{ base: 'none', md: 'flex' }}>
+        <NavLinks />
+      </HStack>
+
+      <IconButton
+        display={{ base: 'flex', md: 'none' }}
+        aria-label="Open menu"
+        icon={<HamburgerIcon />}
+        onClick={onOpen}
+        variant="ghost"
+      />
 
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Menu</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">Menu</DrawerHeader>
           <DrawerBody>
-            <VStack align="start" spacing={4}>
+            <VStack align="stretch" spacing={4} mt={4}>
               <NavLinks />
             </VStack>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </Box>
+    </Flex>
   );
 };
 
 const NavLink: React.FC<NavLinkProps> = ({ to, children }) => {
+  const linkColor = useColorModeValue('gray.600', 'gray.300');
+  const hoverColor = useColorModeValue('blue.500', 'blue.300');
+
   return (
     <Link to={to}>
       <ChakraLink
         as="span"
         fontWeight="medium"
-        _hover={{ textDecoration: 'none', color: 'blue.500' }}
+        color={linkColor}
+        _hover={{
+          color: hoverColor,
+          textDecoration: 'none',
+        }}
+        transition="color 0.2s"
       >
         {children}
       </ChakraLink>
@@ -198,7 +270,8 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children }) => {
 
 const Footer: React.FC = () => {
   const bg = useColorModeValue('gray.50', 'gray.900');
-  const color = useColorModeValue('gray.700', 'gray.200');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const color = useColorModeValue('gray.600', 'gray.300');
   const hoverColor = useColorModeValue('blue.500', 'blue.300');
 
   const socialLinks = [
@@ -211,16 +284,27 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <Box as="footer" bg={bg} color={color} mt="auto">
+    <Box
+      as="footer"
+      bg={bg}
+      color={color}
+      mt="auto"
+      borderTopWidth="1px"
+      borderColor={borderColor}
+    >
       <Container maxW="container.xl" py={12}>
         <Flex direction="column" align="center">
-          <HStack spacing={6} mb={8}>
+          <HStack spacing={8} mb={8}>
             {socialLinks.map((link) => (
               <ChakraLink
                 key={link.label}
                 href={link.href}
                 isExternal
-                _hover={{ color: hoverColor }}
+                _hover={{
+                  color: hoverColor,
+                  transform: 'translateY(-2px)',
+                }}
+                transition="all 0.2s"
                 aria-label={link.label}
               >
                 <link.icon size={24} />
@@ -228,7 +312,7 @@ const Footer: React.FC = () => {
             ))}
           </HStack>
 
-          <Text textAlign="center" fontSize="sm">
+          <Text textAlign="center" fontSize="sm" color={color}>
             © {new Date().getFullYear()} Software Engineering Career Club
             (SWECC). All rights reserved.
           </Text>

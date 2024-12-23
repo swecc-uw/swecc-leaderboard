@@ -11,11 +11,11 @@ import DevRoute from './components/debug/DevRoute';
 import DirectoryPage from './pages/DirectoryPage';
 import MemberProfile from './pages/MemberProfile';
 import AuthPage from './pages/AuthPage';
-import HomePage from './pages/HomePage';
 import AdminRoute from './components/admin/AdminRoute';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ResetPasswordForm from './pages/ResetPassword';
 import AdminConsolePage from './pages/admin/AdminConsolePage';
+import LeaderboardPage from './pages/LeaderboardPage';
 
 const App: React.FC = () => {
   return (
@@ -53,8 +53,6 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
-            <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route path="/home" element={<HomePage />} />
             <Route path="*" element={<div>Not Found</div>} />
             <Route
               path="/admin"
@@ -66,6 +64,7 @@ const App: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+            <Route path="/" element={<LeaderboardPage />} />
             <Route
               path="/protected"
               element={
