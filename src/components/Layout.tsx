@@ -135,7 +135,7 @@ const Navbar: React.FC<NavBarProps> = ({
   isVerified,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const buttonBg = 'green.700'
+  const buttonBg = 'green.700';
   const buttonColor = useColorModeValue('white', 'gray.800');
 
   const NavLinks = () => (
@@ -214,7 +214,7 @@ const Navbar: React.FC<NavBarProps> = ({
             ml={4}
             display={{ base: 'none', md: 'block' }}
           >
-          <em>Leaderboard</em>
+            <em>Leaderboard</em>
           </Text>
         </ChakraLink>
       </Link>

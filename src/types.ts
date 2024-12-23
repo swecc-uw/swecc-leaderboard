@@ -51,7 +51,6 @@ export interface DetailedResponse {
   detail: string;
 }
 
-
 export interface RawGitHubStats {
   user: {
     username: string;

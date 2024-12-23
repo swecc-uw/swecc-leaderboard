@@ -10,6 +10,7 @@
         "elimelt",
         "Glassdoor",
         "Formik",
+        "leaderboard",
         "kwargs"
     ],
     "ignorePaths": [
