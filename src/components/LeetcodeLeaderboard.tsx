@@ -28,6 +28,7 @@ export const LeetcodeLeaderboard: React.FC<Props> = () => {
     // Success
     if (data) {
       setLeetcodeData(data);
+      setIsLoading(false);
       return;
     }
 
@@ -41,6 +42,8 @@ export const LeetcodeLeaderboard: React.FC<Props> = () => {
       duration: 5000,
       isClosable: true,
     });
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
