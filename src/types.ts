@@ -104,6 +104,8 @@ export interface ApplicationStats {
 export enum LeaderboardType {
   LeetCode = 'leetcode',
   GitHub = 'github',
+  InternshipApplications = 'internship-applications',
+  NewGradApplications = 'new-grad-application',
 }
 
 export enum LeetCodeOrderBy {
