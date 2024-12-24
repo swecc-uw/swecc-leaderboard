@@ -16,7 +16,6 @@ import { ChevronUpIcon } from '@chakra-ui/icons';
 import {
   GitHubStats,
   LeetCodeStats,
-  LeaderboardType,
   GitHubOrderBy,
   LeetCodeOrderBy,
   LeaderboardHeader,
@@ -38,10 +37,10 @@ const difficultyColor = (difficulty: string): string => {
 
 interface LeaderboardProps {
   data: GitHubStats[] | LeetCodeStats[];
-  type?: LeaderboardType;
   orderBy: GitHubOrderBy | LeetCodeOrderBy;
   headers: LeaderboardHeader[];
   orderColKey: string;
+  externalLinkConstruct: (username: string) => string;
 }
 
 type Row = {
@@ -58,12 +57,10 @@ type Row = {
 
 const Leaderboard: React.FC<LeaderboardProps> = ({
   data,
-  type,
   orderColKey,
   headers,
+  externalLinkConstruct,
 }) => {
-  const isGitHub = type === LeaderboardType.GitHub;
-
   return (
     <Box borderWidth="1px" borderRadius="xl" overflow="scroll" bg="white">
       <Table variant="simple">
@@ -102,7 +99,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                   borderBottomColor="gray.100"
                   fontSize={header.key === 'username' ? 'sm' : 'xs'}
                 >
-                  {Cell({ ...row, rank: index + 1 }, headers, header, isGitHub)}
+                  {Cell(
+                    { ...row, rank: index + 1 },
+                    headers,
+                    header,
+                    externalLinkConstruct
+                  )}
                 </Td>
               ))}
             </Tr>
@@ -117,7 +119,7 @@ const Cell = (
   row: Row,
   headers: LeaderboardHeader[],
   header: LeaderboardHeader,
-  isGitHub: boolean
+  externalLinkConstruct: (username: string) => string
 ): React.ReactNode => {
   if (!headers.map((h) => h.key).includes(header.key)) {
     devPrint('Invalid header key:', header.key);
@@ -145,14 +147,7 @@ const Cell = (
   if (key === 'username') {
     return (
       <Flex align="center" gap={2}>
-        <Link
-          href={`
-          ${isGitHub ? 'https://github.com' : 'https://leetcode.com'}/${
-            row.username
-          }
-        `}
-          isExternal
-        >
+        <Link href={externalLinkConstruct(row[key])} isExternal>
           {row[key]}
         </Link>
         {row.rank <= 3 && (

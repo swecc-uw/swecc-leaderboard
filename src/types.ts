@@ -123,7 +123,6 @@ export enum GitHubOrderBy {
   Recent = 'recent',
 }
 
-// Combine Internship + New Grad orderings
 export enum ApplicationOrderBy {
   Applied = 'applied',
   Recent = 'recent',

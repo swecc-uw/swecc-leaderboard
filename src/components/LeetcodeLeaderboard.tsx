@@ -5,11 +5,9 @@ import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { useState } from 'react';
 import { getLeetcodeLeaderboard } from '../services/leaderboard';
-import { lastUpdated } from '../utils';
+import { getLeetcodeProfileURL, lastUpdated } from '../utils';
 
-interface Props {}
-
-export const LeetcodeLeaderboard: React.FC<Props> = () => {
+export const LeetcodeLeaderboard: React.FC = () => {
   const [leetcodeOrder, setLeetcodeOrder] = useState<LeetCodeOrderBy>(
     LeetCodeOrderBy.Total
   );
@@ -118,6 +116,7 @@ export const LeetcodeLeaderboard: React.FC<Props> = () => {
           orderBy={leetcodeOrder}
           orderColKey={orderColKey(leetcodeOrder)}
           headers={headers}
+          externalLinkConstruct={getLeetcodeProfileURL}
         />
       </Box>
     </Box>

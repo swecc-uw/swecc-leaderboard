@@ -7,3 +7,11 @@ export const lastUpdated = (data: LeetCodeStats[] | GitHubStats[]) => {
     .reduce((acc, curr) => (curr > acc ? curr : acc), new Date(0));
   return lastUpdated ? formatDate(lastUpdated, true) : '';
 };
+
+export const getLeetcodeProfileURL = (username: string): string => {
+  return `https://leetcode.com/u/${username}`;
+};
+
+export const getGithubProfileURL = (username: string): string => {
+  return `https://github.com/${username}`;
+};

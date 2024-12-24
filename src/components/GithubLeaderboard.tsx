@@ -5,7 +5,7 @@ import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { useState } from 'react';
 import { getGitHubLeaderboard } from '../services/leaderboard';
-import { lastUpdated } from '../utils';
+import { getGithubProfileURL, lastUpdated } from '../utils';
 
 interface Props {}
 
@@ -113,6 +113,7 @@ export const GithubLeaderboard: React.FC<Props> = () => {
           orderBy={githubOrder}
           orderColKey={orderColKey(githubOrder)}
           headers={headers}
+          externalLinkConstruct={getGithubProfileURL}
         />
       </Box>
     </Box>
