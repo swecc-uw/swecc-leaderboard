@@ -128,3 +128,8 @@ export enum ApplicationOrderBy {
   Applied = 'applied',
   Recent = 'recent',
 }
+
+export interface LeaderboardHeader {
+  key: string;
+  label: string;
+}
