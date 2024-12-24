@@ -19,6 +19,7 @@ import {
   LeaderboardType,
   GitHubOrderBy,
   LeetCodeOrderBy,
+  LeaderboardHeader,
 } from '../types';
 import { devPrint } from './utils/RandomUtils';
 
@@ -35,36 +36,13 @@ const difficultyColor = (difficulty: string): string => {
   }
 };
 
-const headers = (isGitHub: boolean): Header[] => {
-  if (isGitHub) {
-    return [
-      { key: 'rank', label: 'Rank' },
-      { key: 'username', label: 'Username' },
-      { key: 'totalCommits', label: 'Commits' },
-      { key: 'totalPrs', label: 'PRs' },
-      { key: 'followers', label: 'Followers' },
-    ];
-  }
-  return [
-    { key: 'rank', label: 'Rank' },
-    { key: 'username', label: 'Username' },
-    { key: 'totalSolved', label: 'Total' },
-    { key: 'easySolved', label: 'Easy' },
-    { key: 'mediumSolved', label: 'Medium' },
-    { key: 'hardSolved', label: 'Hard' },
-  ];
-};
-
 interface LeaderboardProps {
   data: GitHubStats[] | LeetCodeStats[];
-  type: LeaderboardType;
+  type?: LeaderboardType;
   orderBy: GitHubOrderBy | LeetCodeOrderBy;
+  headers: LeaderboardHeader[];
+  orderColKey: string;
 }
-
-type Header = {
-  key: string;
-  label: string;
-};
 
 type Row = {
   rank: number;
@@ -78,45 +56,20 @@ type Row = {
   followers?: number;
 };
 
-const Leaderboard: React.FC<LeaderboardProps> = ({ data, type, orderBy }) => {
+const Leaderboard: React.FC<LeaderboardProps> = ({
+  data,
+  type,
+  orderColKey,
+  headers,
+}) => {
   const isGitHub = type === LeaderboardType.GitHub;
-
-  const orderColKey = (): string => {
-    if (isGitHub) {
-      switch (orderBy as GitHubOrderBy) {
-        case GitHubOrderBy.Commits:
-          return 'totalCommits';
-        case GitHubOrderBy.Prs:
-          return 'totalPrs';
-        case GitHubOrderBy.Followers:
-          return 'followers';
-        default:
-          return '';
-      }
-    } else {
-      switch (orderBy as LeetCodeOrderBy) {
-        case LeetCodeOrderBy.Total:
-          return 'totalSolved';
-        case LeetCodeOrderBy.Easy:
-          return 'easySolved';
-        case LeetCodeOrderBy.Medium:
-          return 'mediumSolved';
-        case LeetCodeOrderBy.Hard:
-          return 'hardSolved';
-        case LeetCodeOrderBy.Completion:
-          return 'totalSolved';
-        default:
-          return '';
-      }
-    }
-  };
 
   return (
     <Box borderWidth="1px" borderRadius="xl" overflow="scroll" bg="white">
       <Table variant="simple">
         <Thead bg="white">
           <Tr>
-            {headers(isGitHub).map((header) => (
+            {headers.map((header) => (
               <Th
                 key={header.key}
                 py={4}
@@ -127,7 +80,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, type, orderBy }) => {
               >
                 <Flex align="center" gap={2}>
                   {header.label}
-                  {header.key === orderColKey() && (
+                  {header.key === orderColKey && (
                     <Icon as={ChevronUpIcon} color="gray.400" boxSize={5} />
                   )}
                 </Flex>
@@ -142,14 +95,14 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, type, orderBy }) => {
               _hover={{ bg: 'gray.50' }}
               transition="background 0.2s"
             >
-              {headers(isGitHub).map((header) => (
+              {headers.map((header) => (
                 <Td
                   key={`${row.username}-${header.key}`}
                   py={4}
                   borderBottomColor="gray.100"
                   fontSize={header.key === 'username' ? 'sm' : 'xs'}
                 >
-                  {Cell({ ...row, rank: index + 1 }, header, isGitHub)}
+                  {Cell({ ...row, rank: index + 1 }, headers, header, isGitHub)}
                 </Td>
               ))}
             </Tr>
@@ -160,12 +113,13 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ data, type, orderBy }) => {
   );
 };
 
-const Cell = (row: Row, header: Header, isGitHub: boolean): React.ReactNode => {
-  if (
-    !headers(isGitHub)
-      .map((h) => h.key)
-      .includes(header.key)
-  ) {
+const Cell = (
+  row: Row,
+  headers: LeaderboardHeader[],
+  header: LeaderboardHeader,
+  isGitHub: boolean
+): React.ReactNode => {
+  if (!headers.map((h) => h.key).includes(header.key)) {
     devPrint('Invalid header key:', header.key);
     return null;
   }
