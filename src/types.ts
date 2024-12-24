@@ -89,9 +89,23 @@ export interface LeetCodeStats {
   lastUpdated: Date;
 }
 
+export interface RawApplicationStats {
+  user: {
+    username: string;
+  };
+  applied: number;
+}
+
+export interface ApplicationStats {
+  username: string;
+  applied: number;
+}
+
 export enum LeaderboardType {
   LeetCode = 'leetcode',
   GitHub = 'github',
+  InternshipApplications = 'internship-applications',
+  NewGradApplications = 'new-grad-application',
 }
 
 export enum LeetCodeOrderBy {
@@ -107,4 +121,14 @@ export enum GitHubOrderBy {
   Prs = 'prs',
   Followers = 'followers',
   Recent = 'recent',
+}
+
+export enum ApplicationOrderBy {
+  Applied = 'applied',
+  Recent = 'recent',
+}
+
+export interface LeaderboardHeader {
+  key: string;
+  label: string;
 }

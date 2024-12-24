@@ -7,6 +7,9 @@ import {
   GitHubStats,
   LeetCodeOrderBy,
   GitHubOrderBy,
+  ApplicationOrderBy,
+  ApplicationStats,
+  RawApplicationStats,
 } from '../types';
 import { devPrint } from '../components/utils/RandomUtils';
 
@@ -44,6 +47,13 @@ function deserializeGitHubStats({
   };
 }
 
+function deserializeApplicationStats({
+  user: { username },
+  applied,
+}: RawApplicationStats): ApplicationStats {
+  return { username, applied };
+}
+
 export function getLeetcodeLeaderboard(
   orderBy: LeetCodeOrderBy = LeetCodeOrderBy.Total
 ): Promise<LeetCodeStats[]> {
@@ -66,6 +76,36 @@ export function getGitHubLeaderboard(
       if (res.status !== 200)
         throw new Error('Failed to get github leaderboard');
       return res.data.map(deserializeGitHubStats);
+    })
+    .catch(devPrint);
+}
+
+export function getInternshipLeaderboard(
+  orderBy: ApplicationOrderBy = ApplicationOrderBy.Applied
+): Promise<ApplicationStats[]> {
+  return api
+    .get(`/leaderboard/internship/?order_by=${orderBy}`)
+    .then((res) => {
+      if (res.status !== 200) {
+        throw new Error('Failed to get internship application leaderboard');
+      }
+
+      return res.data.map(deserializeApplicationStats);
+    })
+    .catch(devPrint);
+}
+
+export function getNewGradLeaderboard(
+  orderBy: ApplicationOrderBy = ApplicationOrderBy.Applied
+): Promise<ApplicationStats[]> {
+  return api
+    .get(`/leaderboard/newgrad/?order_by=${orderBy}`)
+    .then((res) => {
+      if (res.status !== 200) {
+        throw new Error('Failed to get new grad application leaderboard');
+      }
+
+      return res.data.map(deserializeApplicationStats);
     })
     .catch(devPrint);
 }
