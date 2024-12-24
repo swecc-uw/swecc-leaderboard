@@ -99,7 +99,7 @@ export function getNewGradLeaderboard(
   orderBy: ApplicationOrderBy = ApplicationOrderBy.Applied
 ): Promise<ApplicationStats[]> {
   return api
-    .get(`/leaderboard/new-grad/?order_by=${orderBy}`)
+    .get(`/leaderboard/newgrad/?order_by=${orderBy}`)
     .then((res) => {
       if (res.status !== 200) {
         throw new Error('Failed to get new grad application leaderboard');
