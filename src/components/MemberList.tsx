@@ -22,7 +22,7 @@ import { resolveName } from './utils/RandomUtils';
 import { START_PAGE } from '../pages/DirectoryPage';
 import {
   GITHUB_PROFILE_BASE_URL,
-  LEETCODE_API_BASE_URL,
+  LEETCODE_PROFILE_BASE_URL,
   LINKEDIN_PROFILE_BASE_URL,
 } from '../constants';
 
@@ -110,7 +110,7 @@ const MemberCard = ({ member }: { member: Member }) => {
                 <Tooltip label="LeetCode Profile">
                   <IconButton
                     as="a"
-                    href={`${LEETCODE_API_BASE_URL}${member.leetcode.username}`}
+                    href={`${LEETCODE_PROFILE_BASE_URL}${member.leetcode.username}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="LeetCode Profile"
