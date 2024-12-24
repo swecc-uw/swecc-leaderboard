@@ -1,5 +1,5 @@
-import { parseAnyDate } from "../localization";
-import api from "./api";
+import { parseAnyDate } from '../localization';
+import api from './api';
 import {
   RawLeetCodeStats,
   LeetCodeStats,
@@ -10,8 +10,8 @@ import {
   ApplicationOrderBy,
   ApplicationStats,
   RawApplicationStats,
-} from "../types";
-import { devPrint } from "../components/utils/RandomUtils";
+} from '../types';
+import { devPrint } from '../components/utils/RandomUtils';
 
 function deserializeLeetCodeStats({
   user: { username },
@@ -61,7 +61,7 @@ export function getLeetcodeLeaderboard(
     .get(`/leaderboard/leetcode/?order_by=${orderBy}`)
     .then((res) => {
       if (res.status !== 200)
-        throw new Error("Failed to get leetcode leaderboard");
+        throw new Error('Failed to get leetcode leaderboard');
       return res.data.map(deserializeLeetCodeStats);
     })
     .catch(devPrint);
@@ -74,7 +74,7 @@ export function getGitHubLeaderboard(
     .get(`/leaderboard/github/?order_by=${orderBy}`)
     .then((res) => {
       if (res.status !== 200)
-        throw new Error("Failed to get github leaderboard");
+        throw new Error('Failed to get github leaderboard');
       return res.data.map(deserializeGitHubStats);
     })
     .catch(devPrint);
@@ -87,7 +87,7 @@ export function getInternshipLeaderboard(
     .get(`/leaderboard/internship/?order_by=${orderBy}`)
     .then((res) => {
       if (res.status !== 200) {
-        throw new Error("Failed to get internship application leaderboard");
+        throw new Error('Failed to get internship application leaderboard');
       }
 
       return res.data.map(deserializeApplicationStats);
@@ -102,7 +102,7 @@ export function getNewGradLeaderboard(
     .get(`/leaderboard/newgrad/?order_by=${orderBy}`)
     .then((res) => {
       if (res.status !== 200) {
-        throw new Error("Failed to get new grad application leaderboard");
+        throw new Error('Failed to get new grad application leaderboard');
       }
 
       return res.data.map(deserializeApplicationStats);
