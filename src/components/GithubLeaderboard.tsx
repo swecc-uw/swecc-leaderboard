@@ -23,7 +23,7 @@ export const GithubLeaderboard: React.FC<Props> = () => {
     setIsLoading(true);
     setError(undefined);
 
-    const data = await getGitHubLeaderboard();
+    const data = await getGitHubLeaderboard(githubOrder);
 
     // Success
     if (data) {
