@@ -33,11 +33,11 @@ export const GithubLeaderboard: React.FC<Props> = () => {
     }
 
     // Error
-    setError('Failed to fetch leetcode leaderboard data');
+    setError('Failed to fetch GitHub leaderboard data');
 
     toast({
       title: 'Error',
-      description: 'Failed to fetch leetcode leaderboard data',
+      description: 'Failed to fetch GitHub leaderboard data',
       status: 'error',
       duration: 5000,
       isClosable: true,
