@@ -21,7 +21,7 @@ export const LeetcodeLeaderboard: React.FC = () => {
     setIsLoading(true);
     setError(undefined);
 
-    const data = await getLeetcodeLeaderboard();
+    const data = await getLeetcodeLeaderboard(leetcodeOrder);
 
     // Success
     if (data) {
