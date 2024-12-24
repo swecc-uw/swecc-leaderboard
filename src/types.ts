@@ -89,22 +89,40 @@ export interface LeetCodeStats {
   lastUpdated: Date;
 }
 
+export interface RawApplicationStats {
+  user: {
+    username: string;
+  };
+  applied: number;
+}
+
+export interface ApplicationStats {
+  username: string;
+  applied: number;
+}
+
 export enum LeaderboardType {
-  LeetCode = 'leetcode',
-  GitHub = 'github',
+  LeetCode = "leetcode",
+  GitHub = "github",
 }
 
 export enum LeetCodeOrderBy {
-  Total = 'total',
-  Easy = 'easy',
-  Medium = 'medium',
-  Hard = 'hard',
-  Completion = 'completion',
+  Total = "total",
+  Easy = "easy",
+  Medium = "medium",
+  Hard = "hard",
+  Completion = "completion",
 }
 
 export enum GitHubOrderBy {
-  Commits = 'commits',
-  Prs = 'prs',
-  Followers = 'followers',
-  Recent = 'recent',
+  Commits = "commits",
+  Prs = "prs",
+  Followers = "followers",
+  Recent = "recent",
+}
+
+// Combine Internship + New Grad orderings
+export enum ApplicationOrderBy {
+  Applied = "applied",
+  Recent = "recent",
 }
