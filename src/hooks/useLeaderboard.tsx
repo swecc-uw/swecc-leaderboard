@@ -12,6 +12,7 @@ import {
   getLeetcodeLeaderboard,
   getNewGradLeaderboard,
 } from '../services/leaderboard';
+import { assertTypeAndOrderingIntegrity } from '../utils';
 
 const getLeaderboardBasedOnType = (
   type: LeaderboardType
@@ -36,7 +37,6 @@ export const useLeaderboard = (type: LeaderboardType, order: AllOrderings) => {
   const [leaderboardData, setLeaderboardData] = useState<AllLeaderboardData>(
     []
   );
-
   const toast = useToast();
 
   const fetchData = async () => {
@@ -69,6 +69,14 @@ export const useLeaderboard = (type: LeaderboardType, order: AllOrderings) => {
   useEffect(() => {
     fetchData();
   }, [order]);
+
+  if (!assertTypeAndOrderingIntegrity(type, order)) {
+    return {
+      isLoading: false,
+      error: 'Invalid ordering for provided leaderboard',
+      leaderboardData: [],
+    };
+  }
 
   return { isLoading, error, leaderboardData };
 };

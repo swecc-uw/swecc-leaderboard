@@ -1,4 +1,11 @@
-import { AllLeaderboardData } from './types';
+import {
+  AllLeaderboardData,
+  AllOrderings,
+  ApplicationOrderBy,
+  GitHubOrderBy,
+  LeaderboardType,
+  LeetCodeOrderBy,
+} from './types';
 import { formatDate } from './localization';
 
 export const lastUpdated = (data: AllLeaderboardData) => {
@@ -14,4 +21,25 @@ export const getLeetcodeProfileURL = (username: string): string => {
 
 export const getGithubProfileURL = (username: string): string => {
   return `https://github.com/${username}`;
+};
+
+export const assertTypeAndOrderingIntegrity = (
+  type: LeaderboardType,
+  orderBy: AllOrderings
+) => {
+  switch (type) {
+    case LeaderboardType.GitHub:
+      return Object.values(GitHubOrderBy).includes(orderBy as GitHubOrderBy);
+    case LeaderboardType.LeetCode:
+      return Object.values(LeetCodeOrderBy).includes(
+        orderBy as LeetCodeOrderBy
+      );
+    case LeaderboardType.InternshipApplications:
+    case LeaderboardType.NewGradApplications:
+      return Object.values(ApplicationOrderBy).includes(
+        orderBy as ApplicationOrderBy
+      );
+    default:
+      return false;
+  }
 };
