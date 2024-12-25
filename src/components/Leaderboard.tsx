@@ -13,16 +13,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { ChevronUpIcon } from '@chakra-ui/icons';
-import {
-  GitHubStats,
-  LeetCodeStats,
-  GitHubOrderBy,
-  LeetCodeOrderBy,
-  LeaderboardHeader,
-  ApplicationStats,
-  AllLeaderboardData,
-  AllOrderings,
-} from '../types';
+import { LeaderboardHeader, AllLeaderboardData, AllOrderings } from '../types';
 import { devPrint } from './utils/RandomUtils';
 
 const difficultyColor = (difficulty: string): string => {
