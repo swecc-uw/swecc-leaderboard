@@ -132,3 +132,15 @@ export interface LeaderboardHeader {
   key: string;
   label: string;
 }
+
+export type Row = {
+  rank: number;
+  username: string;
+  totalSolved?: number;
+  easySolved?: number;
+  mediumSolved?: number;
+  hardSolved?: number;
+  totalCommits?: number;
+  totalPrs?: number;
+  followers?: number;
+};

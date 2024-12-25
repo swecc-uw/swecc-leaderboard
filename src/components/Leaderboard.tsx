@@ -10,7 +10,6 @@ import {
   Text,
   Flex,
   Icon,
-  Link,
 } from '@chakra-ui/react';
 import { ChevronUpIcon } from '@chakra-ui/icons';
 import {
@@ -21,6 +20,7 @@ import {
   LeaderboardHeader,
 } from '../types';
 import { devPrint } from './utils/RandomUtils';
+import { Row } from '../types';
 
 const difficultyColor = (difficulty: string): string => {
   switch (difficulty.toLowerCase()) {
@@ -40,26 +40,14 @@ interface LeaderboardProps {
   orderBy: GitHubOrderBy | LeetCodeOrderBy;
   headers: LeaderboardHeader[];
   orderColKey: string;
-  externalLinkConstruct: (username: string) => string;
+  cellFormatter: (key: keyof Row, row: Row) => React.ReactNode;
 }
-
-type Row = {
-  rank: number;
-  username: string;
-  totalSolved?: number;
-  easySolved?: number;
-  mediumSolved?: number;
-  hardSolved?: number;
-  totalCommits?: number;
-  totalPrs?: number;
-  followers?: number;
-};
 
 const Leaderboard: React.FC<LeaderboardProps> = ({
   data,
   orderColKey,
   headers,
-  externalLinkConstruct,
+  cellFormatter,
 }) => {
   return (
     <Box borderWidth="1px" borderRadius="xl" overflow="scroll" bg="white">
@@ -103,7 +91,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                     { ...row, rank: index + 1 },
                     headers,
                     header,
-                    externalLinkConstruct
+                    cellFormatter
                   )}
                 </Td>
               ))}
@@ -119,7 +107,7 @@ const Cell = (
   row: Row,
   headers: LeaderboardHeader[],
   header: LeaderboardHeader,
-  externalLinkConstruct: (username: string) => string
+  cellFormatter: (key: keyof Row, row: Row) => React.ReactNode
 ): React.ReactNode => {
   if (!headers.map((h) => h.key).includes(header.key)) {
     devPrint('Invalid header key:', header.key);
@@ -136,20 +124,10 @@ const Cell = (
     );
   }
 
-  if (['easySolved', 'mediumSolved', 'hardSolved'].includes(key)) {
-    return (
-      <Text color={difficultyColor(header.label)} fontWeight="medium">
-        {row[key]}
-      </Text>
-    );
-  }
-
   if (key === 'username') {
     return (
       <Flex align="center" gap={2}>
-        <Link href={externalLinkConstruct(row[key])} isExternal>
-          {row[key]}
-        </Link>
+        {cellFormatter(key, row)}
         {row.rank <= 3 && (
           <Text fontSize="lg">
             {row.rank === 1 ? '👑' : row.rank === 2 ? '🥈' : '🥉'}
@@ -159,7 +137,7 @@ const Cell = (
     );
   }
 
-  return <Text fontWeight="medium">{row[key]}</Text>;
+  return cellFormatter(key, row);
 };
 
 export default Leaderboard;
