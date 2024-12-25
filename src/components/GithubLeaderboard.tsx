@@ -7,9 +7,7 @@ import { useState } from 'react';
 import { getGithubProfileURL, lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
 
-interface Props {}
-
-export const GithubLeaderboard: React.FC<Props> = () => {
+export const GithubLeaderboard: React.FC = () => {
   const [githubOrder, setGithubOrder] = useState<GitHubOrderBy>(
     GitHubOrderBy.Commits
   );

@@ -1,9 +1,7 @@
-import { ApplicationStats, GitHubStats, LeetCodeStats } from './types';
+import { AllLeaderboardData } from './types';
 import { formatDate } from './localization';
 
-export const lastUpdated = (
-  data: LeetCodeStats[] | GitHubStats[] | ApplicationStats[]
-) => {
+export const lastUpdated = (data: AllLeaderboardData) => {
   const lastUpdated = data
     .map((data) => data.lastUpdated)
     .reduce((acc, curr) => (curr > acc ? curr : acc), new Date(0));

@@ -20,6 +20,8 @@ import {
   LeetCodeOrderBy,
   LeaderboardHeader,
   ApplicationStats,
+  AllLeaderboardData,
+  AllOrderings,
 } from '../types';
 import { devPrint } from './utils/RandomUtils';
 
@@ -37,8 +39,8 @@ const difficultyColor = (difficulty: string): string => {
 };
 
 interface LeaderboardProps {
-  data: GitHubStats[] | LeetCodeStats[] | ApplicationStats[];
-  orderBy: GitHubOrderBy | LeetCodeOrderBy;
+  data: AllLeaderboardData;
+  orderBy: AllOrderings;
   headers: LeaderboardHeader[];
   orderColKey: string;
   externalLinkConstruct: (username: string) => string;

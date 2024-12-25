@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 import {
   LeaderboardType,
-  LeetCodeStats,
-  GitHubStats,
-  ApplicationStats,
-  GitHubOrderBy,
-  LeetCodeOrderBy,
-  ApplicationOrderBy,
+  LeaderboardDataHandler,
+  AllLeaderboardData,
+  AllOrderings,
 } from '../types';
 import { useToast } from '@chakra-ui/react';
 import {
@@ -15,12 +12,6 @@ import {
   getLeetcodeLeaderboard,
   getNewGradLeaderboard,
 } from '../services/leaderboard';
-
-type AllOrderings = GitHubOrderBy | LeetCodeOrderBy | ApplicationOrderBy;
-type AllLeaderboardData = GitHubStats[] | LeetCodeStats[] | ApplicationStats[];
-type LeaderboardDataHandler = (
-  order: AllOrderings
-) => Promise<AllLeaderboardData>;
 
 const getLeaderboardBasedOnType = (
   type: LeaderboardType

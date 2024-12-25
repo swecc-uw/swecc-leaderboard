@@ -134,3 +134,12 @@ export interface LeaderboardHeader {
   key: string;
   label: string;
 }
+
+export type AllOrderings = GitHubOrderBy | LeetCodeOrderBy | ApplicationOrderBy;
+export type AllLeaderboardData =
+  | GitHubStats[]
+  | LeetCodeStats[]
+  | ApplicationStats[];
+export type LeaderboardDataHandler = (
+  order: AllOrderings
+) => Promise<AllLeaderboardData>;
