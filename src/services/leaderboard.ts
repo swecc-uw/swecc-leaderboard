@@ -10,6 +10,8 @@ import {
   ApplicationOrderBy,
   ApplicationStats,
   RawApplicationStats,
+  LeaderboardDataHandler,
+  LeaderboardType,
 } from '../types';
 import { devPrint } from '../components/utils/RandomUtils';
 
@@ -50,8 +52,9 @@ function deserializeGitHubStats({
 function deserializeApplicationStats({
   user: { username },
   applied,
+  last_updated,
 }: RawApplicationStats): ApplicationStats {
-  return { username, applied };
+  return { username, applied, lastUpdated: parseAnyDate(last_updated) };
 }
 
 export function getLeetcodeLeaderboard(
@@ -109,3 +112,20 @@ export function getNewGradLeaderboard(
     })
     .catch(devPrint);
 }
+
+export const getLeaderboardDataHandlerFromType = (
+  type: LeaderboardType
+): LeaderboardDataHandler => {
+  switch (type) {
+    case LeaderboardType.LeetCode:
+      return getLeetcodeLeaderboard as LeaderboardDataHandler;
+    case LeaderboardType.GitHub:
+      return getGitHubLeaderboard as LeaderboardDataHandler;
+    case LeaderboardType.InternshipApplications:
+      return getInternshipLeaderboard as LeaderboardDataHandler;
+    case LeaderboardType.NewGradApplications:
+      return getNewGradLeaderboard as LeaderboardDataHandler;
+    default:
+      throw new Error('Invalid leaderboard type was provided');
+  }
+};
