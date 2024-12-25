@@ -1,35 +1,8 @@
 import { useEffect, useState } from 'react';
-import {
-  LeaderboardType,
-  LeaderboardDataHandler,
-  Ordering,
-  LeaderboardEntry,
-} from '../types';
+import { LeaderboardType, Ordering, LeaderboardEntry } from '../types';
 import { useToast } from '@chakra-ui/react';
-import {
-  getGitHubLeaderboard,
-  getInternshipLeaderboard,
-  getLeetcodeLeaderboard,
-  getNewGradLeaderboard,
-} from '../services/leaderboard';
+import { getLeaderboardDataHandlerFromType } from '../services/leaderboard';
 import { assertTypeAndOrderingIntegrity } from '../utils';
-
-const getLeaderboardDataHandlerFromType = (
-  type: LeaderboardType
-): LeaderboardDataHandler => {
-  switch (type) {
-    case LeaderboardType.LeetCode:
-      return getLeetcodeLeaderboard as LeaderboardDataHandler;
-    case LeaderboardType.GitHub:
-      return getGitHubLeaderboard as LeaderboardDataHandler;
-    case LeaderboardType.InternshipApplications:
-      return getInternshipLeaderboard as LeaderboardDataHandler;
-    case LeaderboardType.NewGradApplications:
-      return getNewGradLeaderboard as LeaderboardDataHandler;
-    default:
-      throw new Error('Invalid leaderboard type was provided');
-  }
-};
 
 export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
