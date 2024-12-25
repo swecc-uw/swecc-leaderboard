@@ -1,11 +1,11 @@
-import { Flex, Spinner, Text, Box, useToast } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { GitHubOrderBy, GitHubStats } from '../types';
+import { Flex, Spinner, Text, Box } from '@chakra-ui/react';
+import React from 'react';
+import { GitHubOrderBy, LeaderboardType } from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { useState } from 'react';
-import { getGitHubLeaderboard } from '../services/leaderboard';
 import { getGithubProfileURL, lastUpdated } from '../utils';
+import { useLeaderboard } from '../hooks/useLeaderboard';
 
 interface Props {}
 
@@ -13,42 +13,12 @@ export const GithubLeaderboard: React.FC<Props> = () => {
   const [githubOrder, setGithubOrder] = useState<GitHubOrderBy>(
     GitHubOrderBy.Commits
   );
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>();
-  const [githubData, setGithubData] = useState<GitHubStats[]>([]);
 
-  const toast = useToast();
-
-  const fetchData = async () => {
-    setIsLoading(true);
-    setError(undefined);
-
-    const data = await getGitHubLeaderboard(githubOrder);
-
-    // Success
-    if (data) {
-      setGithubData(data);
-      setIsLoading(false);
-      return;
-    }
-
-    // Error
-    setError('Failed to fetch GitHub leaderboard data');
-
-    toast({
-      title: 'Error',
-      description: 'Failed to fetch GitHub leaderboard data',
-      status: 'error',
-      duration: 5000,
-      isClosable: true,
-    });
-
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [githubOrder]);
+  const {
+    isLoading,
+    error,
+    leaderboardData: githubData,
+  } = useLeaderboard(LeaderboardType.GitHub, githubOrder);
 
   if (isLoading) {
     return (
