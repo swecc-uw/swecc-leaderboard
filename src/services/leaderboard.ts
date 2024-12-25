@@ -50,8 +50,9 @@ function deserializeGitHubStats({
 function deserializeApplicationStats({
   user: { username },
   applied,
+  last_updated,
 }: RawApplicationStats): ApplicationStats {
-  return { username, applied };
+  return { username, applied, lastUpdated: parseAnyDate(last_updated) };
 }
 
 export function getLeetcodeLeaderboard(

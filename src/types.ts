@@ -94,11 +94,13 @@ export interface RawApplicationStats {
     username: string;
   };
   applied: number;
+  last_updated: string;
 }
 
 export interface ApplicationStats {
   username: string;
   applied: number;
+  lastUpdated: Date;
 }
 
 export enum LeaderboardType {
