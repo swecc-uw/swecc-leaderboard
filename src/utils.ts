@@ -1,14 +1,14 @@
 import {
-  AllLeaderboardData,
-  AllOrderings,
+  Ordering,
   ApplicationOrderBy,
   GitHubOrderBy,
   LeaderboardType,
   LeetCodeOrderBy,
+  LeaderboardEntry,
 } from './types';
 import { formatDate } from './localization';
 
-export const lastUpdated = (data: AllLeaderboardData) => {
+export const lastUpdated = (data: LeaderboardEntry[]) => {
   const lastUpdated = data
     .map((data) => data.lastUpdated)
     .reduce((acc, curr) => (curr > acc ? curr : acc), new Date(0));
@@ -25,7 +25,7 @@ export const getGithubProfileURL = (username: string): string => {
 
 export const assertTypeAndOrderingIntegrity = (
   type: LeaderboardType,
-  orderBy: AllOrderings
+  orderBy: Ordering
 ) => {
   switch (type) {
     case LeaderboardType.GitHub:

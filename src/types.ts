@@ -51,6 +51,11 @@ export interface DetailedResponse {
   detail: string;
 }
 
+export interface LeaderboardEntry {
+  username: string;
+  lastUpdated: Date;
+}
+
 export interface RawGitHubStats {
   user: {
     username: string;
@@ -61,12 +66,10 @@ export interface RawGitHubStats {
   last_updated: string;
 }
 
-export interface GitHubStats {
-  username: string;
+export interface GitHubStats extends LeaderboardEntry {
   totalPrs: number;
   totalCommits: number;
   followers: number;
-  lastUpdated: Date;
 }
 
 export interface RawLeetCodeStats {
@@ -80,13 +83,11 @@ export interface RawLeetCodeStats {
   last_updated: string;
 }
 
-export interface LeetCodeStats {
-  username: string;
+export interface LeetCodeStats extends LeaderboardEntry {
   totalSolved: number;
   easySolved: number;
   mediumSolved: number;
   hardSolved: number;
-  lastUpdated: Date;
 }
 
 export interface RawApplicationStats {
@@ -97,10 +98,8 @@ export interface RawApplicationStats {
   last_updated: string;
 }
 
-export interface ApplicationStats {
-  username: string;
+export interface ApplicationStats extends LeaderboardEntry {
   applied: number;
-  lastUpdated: Date;
 }
 
 export enum LeaderboardType {
@@ -135,11 +134,7 @@ export interface LeaderboardHeader {
   label: string;
 }
 
-export type AllOrderings = GitHubOrderBy | LeetCodeOrderBy | ApplicationOrderBy;
-export type AllLeaderboardData =
-  | GitHubStats[]
-  | LeetCodeStats[]
-  | ApplicationStats[];
+export type Ordering = GitHubOrderBy | LeetCodeOrderBy | ApplicationOrderBy;
 export type LeaderboardDataHandler = (
-  order: AllOrderings
-) => Promise<AllLeaderboardData>;
+  order: Ordering
+) => Promise<LeaderboardEntry[]>;
