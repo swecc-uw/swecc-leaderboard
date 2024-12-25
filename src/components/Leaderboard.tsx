@@ -22,19 +22,6 @@ import {
 import { devPrint } from './utils/RandomUtils';
 import { Row } from '../types';
 
-const difficultyColor = (difficulty: string): string => {
-  switch (difficulty.toLowerCase()) {
-    case 'easy':
-      return 'green.500';
-    case 'medium':
-      return 'yellow.500';
-    case 'hard':
-      return 'red.500';
-    default:
-      return 'gray.500';
-  }
-};
-
 interface LeaderboardProps {
   data: GitHubStats[] | LeetCodeStats[];
   orderBy: GitHubOrderBy | LeetCodeOrderBy;
