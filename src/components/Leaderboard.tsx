@@ -30,6 +30,16 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   headers,
   cellFormatter,
 }) => {
+  if (data.length === 0) {
+    return (
+      <Flex justifyContent={'center'}>
+        <Text fontWeight={'semibold'} fontSize={'larger'}>
+          No data available.
+        </Text>
+      </Flex>
+    );
+  }
+
   return (
     <Box borderWidth="1px" borderRadius="xl" overflow="scroll" bg="white">
       <Table variant="simple">
