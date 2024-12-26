@@ -32,8 +32,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
 }) => {
   if (data.length === 0) {
     return (
-      <Flex justifyContent={'center'}>
-        <Text fontWeight={'semibold'} fontSize={'larger'}>
+      <Flex justifyContent="center">
+        <Text fontWeight="semibold" fontSize="larger">
           No data available.
         </Text>
       </Flex>
