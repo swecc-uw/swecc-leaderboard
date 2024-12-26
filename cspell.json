@@ -12,7 +12,8 @@
     "Formik",
     "leaderboard",
     "kwargs",
-    "newgrad"
+    "newgrad",
+    "Leaderboards"
   ],
   "ignorePaths": ["node_modules/**", "dist/**", "build/**"],
   "files": ["src/**/*.{tsx,ts,html,md}"]
