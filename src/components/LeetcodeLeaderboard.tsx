@@ -1,11 +1,40 @@
-import { Flex, Spinner, Text, Box } from '@chakra-ui/react';
+import { Flex, Spinner, Text, Box, Link } from '@chakra-ui/react';
 import React from 'react';
-import { LeaderboardType, LeetCodeOrderBy } from '../types';
+import { LeaderboardType, LeetCodeOrderBy, Row } from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { useState } from 'react';
 import { getLeetcodeProfileURL, lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
+
+const difficultyColors = {
+  easySolved: 'green.500',
+  mediumSolved: 'yellow.500',
+  hardSolved: 'red.500',
+};
+
+const formatLeaderboardEntry = (key: keyof Row, row: Row): React.ReactNode => {
+  if (key === 'username') {
+    return (
+      <Link href={getLeetcodeProfileURL(row[key])} isExternal>
+        {row[key]}
+      </Link>
+    );
+  }
+
+  if (['easySolved', 'mediumSolved', 'hardSolved'].includes(key)) {
+    return (
+      <Text
+        color={difficultyColors[key as keyof typeof difficultyColors]}
+        fontWeight="medium"
+      >
+        {row[key]}
+      </Text>
+    );
+  }
+
+  return <Text fontWeight={'medium'}>{row[key]}</Text>;
+};
 
 export const LeetcodeLeaderboard: React.FC = () => {
   const [leetcodeOrder, setLeetcodeOrder] = useState<LeetCodeOrderBy>(
@@ -86,7 +115,7 @@ export const LeetcodeLeaderboard: React.FC = () => {
           orderBy={leetcodeOrder}
           orderColKey={orderColKey(leetcodeOrder)}
           headers={headers}
-          externalLinkConstruct={getLeetcodeProfileURL}
+          cellFormatter={formatLeaderboardEntry}
         />
       </Box>
     </Box>

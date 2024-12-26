@@ -1,11 +1,24 @@
-import { Flex, Spinner, Text, Box } from '@chakra-ui/react';
+import { Flex, Spinner, Text, Box, Link } from '@chakra-ui/react';
 import React from 'react';
-import { GitHubOrderBy, LeaderboardType } from '../types';
+import { GitHubOrderBy, LeaderboardType, Row } from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { useState } from 'react';
 import { getGithubProfileURL, lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
+
+
+const formatLeaderboardEntry = (key: keyof Row, row: Row): React.ReactNode => {
+  if (key === 'username') {
+    return (
+      <Link href={getGithubProfileURL(row[key])} isExternal>
+        {row[key]}
+      </Link>
+    );
+  }
+
+  return <Text fontWeight={'medium'}>{row[key]}</Text>;
+};
 
 export const GithubLeaderboard: React.FC = () => {
   const [githubOrder, setGithubOrder] = useState<GitHubOrderBy>(
@@ -81,7 +94,7 @@ export const GithubLeaderboard: React.FC = () => {
           orderBy={githubOrder}
           orderColKey={orderColKey(githubOrder)}
           headers={headers}
-          externalLinkConstruct={getGithubProfileURL}
+          cellFormatter={formatLeaderboardEntry}
         />
       </Box>
     </Box>
