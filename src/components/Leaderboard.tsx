@@ -12,19 +12,13 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { ChevronUpIcon } from '@chakra-ui/icons';
-import {
-  GitHubStats,
-  LeetCodeStats,
-  GitHubOrderBy,
-  LeetCodeOrderBy,
-  LeaderboardHeader,
-} from '../types';
+import { LeaderboardHeader, Ordering, LeaderboardEntry } from '../types';
 import { devPrint } from './utils/RandomUtils';
 import { Row } from '../types';
 
 interface LeaderboardProps {
-  data: GitHubStats[] | LeetCodeStats[];
-  orderBy: GitHubOrderBy | LeetCodeOrderBy;
+  data: LeaderboardEntry[];
+  orderBy: Ordering;
   headers: LeaderboardHeader[];
   orderColKey: string;
   cellFormatter: (key: keyof Row, row: Row) => React.ReactNode;

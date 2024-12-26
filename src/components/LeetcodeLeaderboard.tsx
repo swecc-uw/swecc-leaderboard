@@ -1,11 +1,11 @@
-import { Flex, Spinner, Text, Box, useToast, Link } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { LeetCodeOrderBy, LeetCodeStats, Row } from '../types';
+import { Flex, Spinner, Text, Box, Link } from '@chakra-ui/react';
+import React from 'react';
+import { LeaderboardType, LeetCodeOrderBy, Row } from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { useState } from 'react';
-import { getLeetcodeLeaderboard } from '../services/leaderboard';
 import { getLeetcodeProfileURL, lastUpdated } from '../utils';
+import { useLeaderboard } from '../hooks/useLeaderboard';
 
 const difficultyColors = {
   easySolved: 'green.500',
@@ -40,42 +40,12 @@ export const LeetcodeLeaderboard: React.FC = () => {
   const [leetcodeOrder, setLeetcodeOrder] = useState<LeetCodeOrderBy>(
     LeetCodeOrderBy.Total
   );
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>();
-  const [leetcodeData, setLeetcodeData] = useState<LeetCodeStats[]>([]);
 
-  const toast = useToast();
-
-  const fetchData = async () => {
-    setIsLoading(true);
-    setError(undefined);
-
-    const data = await getLeetcodeLeaderboard(leetcodeOrder);
-
-    // Success
-    if (data) {
-      setLeetcodeData(data);
-      setIsLoading(false);
-      return;
-    }
-
-    // Error
-    setError('Failed to fetch leetcode leaderboard data');
-
-    toast({
-      title: 'Error',
-      description: 'Failed to fetch leetcode leaderboard data',
-      status: 'error',
-      duration: 5000,
-      isClosable: true,
-    });
-
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [leetcodeOrder]);
+  const {
+    isLoading,
+    error,
+    leaderboardData: leetcodeData,
+  } = useLeaderboard(LeaderboardType.LeetCode, leetcodeOrder);
 
   if (isLoading) {
     return (
