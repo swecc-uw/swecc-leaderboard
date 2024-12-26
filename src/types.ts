@@ -134,7 +134,6 @@ export interface LeaderboardHeader {
   label: string;
 }
 
-
 export type Row = {
   rank: number;
   username: string;
@@ -151,4 +150,3 @@ export type Ordering = GitHubOrderBy | LeetCodeOrderBy | ApplicationOrderBy;
 export type LeaderboardDataHandler = (
   order: Ordering
 ) => Promise<LeaderboardEntry[]>;
-

@@ -9,6 +9,11 @@ import {
 import { formatDate } from './localization';
 
 export const lastUpdated = (data: LeaderboardEntry[]) => {
+  // If we didn't receive any data from the API, set last updated to the current time
+  if (data.length === 0) {
+    return formatDate(new Date(), true);
+  }
+
   const lastUpdated = data
     .map((data) => data.lastUpdated)
     .reduce((acc, curr) => (curr > acc ? curr : acc), new Date(0));
