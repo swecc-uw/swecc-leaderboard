@@ -10,6 +10,7 @@ import {
 import { LeaderboardType } from '../types';
 import { LeetcodeLeaderboard } from '../components/LeetcodeLeaderboard';
 import { GithubLeaderboard } from '../components/GithubLeaderboard';
+import { ApplicationLeaderboard } from '../components/ApplicationLeaderboard';
 
 const LeaderboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<LeaderboardType>(
@@ -17,10 +18,21 @@ const LeaderboardPage: React.FC = () => {
   );
   const borderColor = useColorModeValue('gray.200', 'gray.700');
 
+  const includedLeaderboards = [
+    { type: LeaderboardType.LeetCode, tabLabel: 'LeetCode' },
+    { type: LeaderboardType.GitHub, tabLabel: 'GitHub' },
+    {
+      type: LeaderboardType.InternshipApplications,
+      tabLabel: 'Internship Applications',
+    },
+    {
+      type: LeaderboardType.NewGradApplications,
+      tabLabel: 'New Grad Applications',
+    },
+  ];
+
   const handleTabChange = (index: number) => {
-    setActiveTab(
-      index === 0 ? LeaderboardType.LeetCode : LeaderboardType.GitHub
-    );
+    setActiveTab(includedLeaderboards[index].type);
   };
 
   const renderContent = () => {
@@ -29,6 +41,9 @@ const LeaderboardPage: React.FC = () => {
         return <LeetcodeLeaderboard />;
       case LeaderboardType.GitHub:
         return <GithubLeaderboard />;
+      case LeaderboardType.NewGradApplications:
+      case LeaderboardType.InternshipApplications:
+        return <ApplicationLeaderboard type={activeTab} />;
     }
   };
 
@@ -37,8 +52,9 @@ const LeaderboardPage: React.FC = () => {
       <VStack spacing={6} align="stretch">
         <Tabs onChange={handleTabChange} colorScheme="blue" variant="enclosed">
           <TabList borderBottomWidth="1px" borderBottomColor={borderColor}>
-            <Tab>LeetCode</Tab>
-            <Tab>GitHub</Tab>
+            {includedLeaderboards.map(({ tabLabel }, key) => {
+              return <Tab key={key}>{tabLabel}</Tab>;
+            })}
           </TabList>
         </Tabs>
         {renderContent()}
