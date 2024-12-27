@@ -4,23 +4,32 @@ import { useToast } from '@chakra-ui/react';
 import { getLeaderboardDataHandlerFromType } from '../services/leaderboard';
 import { assertTypeAndOrderingIntegrity } from '../utils';
 
+const leaderboardCache = new Map<string, LeaderboardEntry[]>();
+
 export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>();
+  const cacheKey = `${type}-${order}`;
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(
-    []
+    leaderboardCache.get(cacheKey) || []
   );
   const toast = useToast();
 
   const fetchData = async () => {
+    const cachedData = leaderboardCache.get(cacheKey);
+    if (cachedData) {
+      setLeaderboardData(cachedData);
+      return;
+    }
+
     setIsLoading(true);
     setError(undefined);
 
     try {
       const data = await getLeaderboardDataHandlerFromType(type)(order);
-      // Success
       if (data) {
         setLeaderboardData(data);
+        leaderboardCache.set(cacheKey, data);
       }
     } catch (e) {
       const errorMessage = (e as Error).message;
