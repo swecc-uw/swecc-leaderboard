@@ -1,6 +1,6 @@
 import { Flex, Spinner, Text, Box, Link } from '@chakra-ui/react';
-import React from 'react';
-import { GitHubOrderBy, LeaderboardType, Row } from '../types';
+import React, { useState } from 'react';
+import { GitHubOrderBy, LeaderboardType, Row, SortDirection } from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { getGithubProfileURL, lastUpdated } from '../utils';
@@ -27,6 +27,7 @@ export const GithubLeaderboard: React.FC<Props> = ({
   order,
   onOrderChange,
 }) => {
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const {
     isLoading,
     error,
@@ -56,12 +57,39 @@ export const GithubLeaderboard: React.FC<Props> = ({
   ];
 
   const headers = [
-    { key: 'rank', label: 'Rank' },
-    { key: 'username', label: 'Username' },
+    { key: 'rank', label: 'Rank', static: true },
+    { key: 'username', label: 'Username', static: true },
     { key: 'totalCommits', label: 'Commits' },
     { key: 'totalPrs', label: 'PRs' },
     { key: 'followers', label: 'Followers' },
   ];
+
+  const getOrderByFromKey = (key: string): GitHubOrderBy | null => {
+    switch (key) {
+      case 'totalCommits':
+        return GitHubOrderBy.Commits;
+      case 'totalPrs':
+        return GitHubOrderBy.Prs;
+      case 'followers':
+        return GitHubOrderBy.Followers;
+      default:
+        return null;
+    }
+  };
+
+  const handleSort = (key: string) => {
+    const newOrder = getOrderByFromKey(key);
+    if (newOrder) {
+      // if active column clicked
+      if (newOrder === order) {
+        setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      } else {
+        // desc by default
+        setSortDirection('desc');
+        onOrderChange(newOrder);
+      }
+    }
+  };
 
   const orderColKey = (order: GitHubOrderBy) => {
     switch (order) {
@@ -92,9 +120,11 @@ export const GithubLeaderboard: React.FC<Props> = ({
         <Leaderboard
           data={githubData}
           orderBy={order}
+          sortDirection={sortDirection}
           orderColKey={orderColKey(order)}
           headers={headers}
           cellFormatter={formatLeaderboardEntry}
+          onSort={handleSort}
         />
       </Box>
     </Box>

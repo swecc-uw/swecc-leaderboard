@@ -1,6 +1,6 @@
 import { Flex, Spinner, Text, Box, Link } from '@chakra-ui/react';
-import React from 'react';
-import { LeaderboardType, LeetCodeOrderBy, Row } from '../types';
+import React, { useState } from 'react';
+import { LeaderboardType, LeetCodeOrderBy, Row, SortDirection } from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { getLeetcodeProfileURL, lastUpdated } from '../utils';
@@ -44,6 +44,7 @@ export const LeetcodeLeaderboard: React.FC<Props> = ({
   order,
   onOrderChange,
 }) => {
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const {
     isLoading,
     error,
@@ -73,8 +74,8 @@ export const LeetcodeLeaderboard: React.FC<Props> = ({
   ];
 
   const headers = [
-    { key: 'rank', label: 'Rank' },
-    { key: 'username', label: 'Username' },
+    { key: 'rank', label: 'Rank', static: true },
+    { key: 'username', label: 'Username', static: true },
     { key: 'totalSolved', label: 'Total' },
     { key: 'easySolved', label: 'Easy' },
     { key: 'mediumSolved', label: 'Medium' },
@@ -98,6 +99,33 @@ export const LeetcodeLeaderboard: React.FC<Props> = ({
     }
   };
 
+  const getOrderByFromKey = (key: string): LeetCodeOrderBy | undefined => {
+    switch (key) {
+      case 'totalSolved':
+        return LeetCodeOrderBy.Total;
+      case 'easySolved':
+        return LeetCodeOrderBy.Easy;
+      case 'mediumSolved':
+        return LeetCodeOrderBy.Medium;
+      case 'hardSolved':
+        return LeetCodeOrderBy.Hard;
+      default:
+        return undefined;
+    }
+  };
+
+  const handleSort = (key: string) => {
+    const newOrder = getOrderByFromKey(key);
+    if (newOrder) {
+      if (newOrder === order) {
+        setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      } else {
+        setSortDirection('desc');
+        onOrderChange(newOrder);
+      }
+    }
+  };
+
   return (
     <Box>
       <Flex justify="space-between" align="center" mb={4}>
@@ -114,9 +142,11 @@ export const LeetcodeLeaderboard: React.FC<Props> = ({
         <Leaderboard
           data={leetcodeData}
           orderBy={order}
+          sortDirection={sortDirection}
           orderColKey={orderColKey(order)}
           headers={headers}
           cellFormatter={formatLeaderboardEntry}
+          onSort={handleSort}
         />
       </Box>
     </Box>

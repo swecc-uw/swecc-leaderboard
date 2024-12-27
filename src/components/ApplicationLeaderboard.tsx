@@ -51,8 +51,8 @@ export const ApplicationLeaderboard: React.FC<Props> = ({
   ];
 
   const headers = [
-    { key: 'rank', label: 'Rank' },
-    { key: 'username', label: 'Username' },
+    { key: 'rank', label: 'Rank', static: true },
+    { key: 'username', label: 'Username', static: true },
     { key: 'applied', label: 'Applied' },
   ];
 
@@ -81,6 +81,7 @@ export const ApplicationLeaderboard: React.FC<Props> = ({
       <Box>
         <Leaderboard
           data={applicationData}
+          sortDirection="desc"
           orderBy={order}
           orderColKey={orderColKey(order)}
           headers={headers}

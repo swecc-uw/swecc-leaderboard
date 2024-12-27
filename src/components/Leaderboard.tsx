@@ -12,23 +12,32 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { ChevronUpIcon } from '@chakra-ui/icons';
-import { LeaderboardHeader, Ordering, LeaderboardEntry } from '../types';
+import {
+  LeaderboardHeader,
+  Ordering,
+  LeaderboardEntry,
+  SortDirection,
+  Row,
+} from '../types';
 import { devPrint } from './utils/RandomUtils';
-import { Row } from '../types';
 
 interface LeaderboardProps {
   data: LeaderboardEntry[];
   orderBy: Ordering;
+  sortDirection: SortDirection;
   headers: LeaderboardHeader[];
   orderColKey: string;
   cellFormatter: (key: keyof Row, row: Row) => React.ReactNode;
+  onSort?: (key: string) => void;
 }
 
 const Leaderboard: React.FC<LeaderboardProps> = ({
   data,
+  sortDirection,
   orderColKey,
   headers,
   cellFormatter,
+  onSort,
 }) => {
   if (data.length === 0) {
     return (
@@ -39,6 +48,24 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
       </Flex>
     );
   }
+
+  // Sort data based on direction
+  const sortedData = React.useMemo(() => {
+    const sorted = [...data];
+    if (sortDirection === 'asc') {
+      sorted.reverse();
+    }
+    return sorted;
+  }, [data, sortDirection]);
+
+  // Ranks based on descending order
+  const rankMap = React.useMemo(() => {
+    const map = new Map();
+    data.forEach((item, index) => {
+      map.set(item.username, index + 1);
+    });
+    return map;
+  }, [data]);
 
   return (
     <Box borderWidth="1px" borderRadius="xl" overflow="scroll" bg="white">
@@ -53,11 +80,22 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                 borderBottomColor="gray.200"
                 color="gray.600"
                 fontSize="xs"
+                cursor={header.static ? 'default' : 'pointer'}
+                onClick={() => onSort?.(header.key)}
+                _hover={{ bg: 'gray.50' }}
               >
                 <Flex align="center" gap={2}>
                   {header.label}
                   {header.key === orderColKey && (
-                    <Icon as={ChevronUpIcon} color="gray.400" boxSize={5} />
+                    <Icon
+                      as={ChevronUpIcon}
+                      color="gray.400"
+                      boxSize={5}
+                      transform={
+                        sortDirection === 'desc' ? 'rotate(180deg)' : undefined
+                      }
+                      transition="transform 0.2s"
+                    />
                   )}
                 </Flex>
               </Th>
@@ -65,7 +103,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
           </Tr>
         </Thead>
         <Tbody>
-          {data.map((row, index) => (
+          {sortedData.map((row) => (
             <Tr
               key={row.username}
               _hover={{ bg: 'gray.50' }}
@@ -79,7 +117,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                   fontSize={header.key === 'username' ? 'sm' : 'xs'}
                 >
                   {Cell(
-                    { ...row, rank: index + 1 },
+                    { ...row, rank: rankMap.get(row.username) },
                     headers,
                     header,
                     cellFormatter
