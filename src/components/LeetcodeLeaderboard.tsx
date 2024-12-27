@@ -3,9 +3,13 @@ import React from 'react';
 import { LeaderboardType, LeetCodeOrderBy, Row } from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
-import { useState } from 'react';
 import { getLeetcodeProfileURL, lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
+
+interface Props {
+  order: LeetCodeOrderBy;
+  onOrderChange: (order: LeetCodeOrderBy) => void;
+}
 
 const difficultyColors = {
   easySolved: 'green.500',
@@ -36,16 +40,15 @@ const formatLeaderboardEntry = (key: keyof Row, row: Row): React.ReactNode => {
   return <Text fontWeight={'medium'}>{row[key]}</Text>;
 };
 
-export const LeetcodeLeaderboard: React.FC = () => {
-  const [leetcodeOrder, setLeetcodeOrder] = useState<LeetCodeOrderBy>(
-    LeetCodeOrderBy.Total
-  );
-
+export const LeetcodeLeaderboard: React.FC<Props> = ({
+  order,
+  onOrderChange,
+}) => {
   const {
     isLoading,
     error,
     leaderboardData: leetcodeData,
-  } = useLeaderboard(LeaderboardType.LeetCode, leetcodeOrder);
+  } = useLeaderboard(LeaderboardType.LeetCode, order);
 
   if (isLoading) {
     return (
@@ -63,7 +66,7 @@ export const LeetcodeLeaderboard: React.FC = () => {
     );
   }
   const leetcodeOptions = [
-    { value: LeetCodeOrderBy.Total, label: 'Total Problems' },
+    { value: LeetCodeOrderBy.Total, label: 'Total Solved' },
     { value: LeetCodeOrderBy.Easy, label: 'Easy Problems' },
     { value: LeetCodeOrderBy.Medium, label: 'Medium Problems' },
     { value: LeetCodeOrderBy.Hard, label: 'Hard Problems' },
@@ -102,18 +105,16 @@ export const LeetcodeLeaderboard: React.FC = () => {
           Last updated: {lastUpdated(leetcodeData)}
         </Text>
         <OrderBySelect
-          value={leetcodeOrder}
-          onChange={(value) => {
-            setLeetcodeOrder(value as LeetCodeOrderBy);
-          }}
+          value={order}
+          onChange={onOrderChange}
           options={leetcodeOptions}
         />
       </Flex>
       <Box>
         <Leaderboard
           data={leetcodeData}
-          orderBy={leetcodeOrder}
-          orderColKey={orderColKey(leetcodeOrder)}
+          orderBy={order}
+          orderColKey={orderColKey(order)}
           headers={headers}
           cellFormatter={formatLeaderboardEntry}
         />

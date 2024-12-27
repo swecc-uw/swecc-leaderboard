@@ -7,7 +7,12 @@ import {
   Container,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { LeaderboardType } from '../types';
+import {
+  LeaderboardType,
+  LeetCodeOrderBy,
+  GitHubOrderBy,
+  ApplicationOrderBy,
+} from '../types';
 import { LeetcodeLeaderboard } from '../components/LeetcodeLeaderboard';
 import { GithubLeaderboard } from '../components/GithubLeaderboard';
 import { ApplicationLeaderboard } from '../components/ApplicationLeaderboard';
@@ -16,6 +21,14 @@ const LeaderboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<LeaderboardType>(
     LeaderboardType.LeetCode
   );
+  const [leetcodeSortOrder, setLeetcodeSortOrder] = useState<LeetCodeOrderBy>(
+    LeetCodeOrderBy.Total
+  );
+  const [githubSortOrder, setGithubSortOrder] = useState<GitHubOrderBy>(
+    GitHubOrderBy.Commits
+  );
+  const [applicationSortOrder, setApplicationSortOrder] =
+    useState<ApplicationOrderBy>(ApplicationOrderBy.Applied);
   const borderColor = useColorModeValue('gray.200', 'gray.700');
 
   const includedLeaderboards = [
@@ -38,12 +51,28 @@ const LeaderboardPage: React.FC = () => {
   const renderContent = () => {
     switch (activeTab) {
       case LeaderboardType.LeetCode:
-        return <LeetcodeLeaderboard />;
+        return (
+          <LeetcodeLeaderboard
+            order={leetcodeSortOrder}
+            onOrderChange={setLeetcodeSortOrder}
+          />
+        );
       case LeaderboardType.GitHub:
-        return <GithubLeaderboard />;
+        return (
+          <GithubLeaderboard
+            order={githubSortOrder}
+            onOrderChange={setGithubSortOrder}
+          />
+        );
       case LeaderboardType.NewGradApplications:
       case LeaderboardType.InternshipApplications:
-        return <ApplicationLeaderboard type={activeTab} />;
+        return (
+          <ApplicationLeaderboard
+            type={activeTab}
+            order={applicationSortOrder}
+            onOrderChange={setApplicationSortOrder}
+          />
+        );
     }
   };
 
