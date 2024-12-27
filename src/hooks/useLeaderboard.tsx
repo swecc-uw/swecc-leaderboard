@@ -16,18 +16,21 @@ const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes
 export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
   const cacheKey = `${type}-${order}`;
   const cachedEntry = leaderboardCache.get(cacheKey);
-  const isCacheValid = cachedEntry && (Date.now() - cachedEntry.timestamp) < CACHE_EXPIRATION_MS;
-  
+  const isCacheValid =
+    cachedEntry && Date.now() - cachedEntry.timestamp < CACHE_EXPIRATION_MS;
+
   const [isLoading, setIsLoading] = useState<boolean>(!isCacheValid);
   const [error, setError] = useState<string>();
-  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(cachedEntry?.data || []);
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(
+    cachedEntry?.data || []
+  );
   const toast = useToast();
 
   const fetchData = async () => {
     const cachedEntry = leaderboardCache.get(cacheKey);
     const now = Date.now();
-    
-    if (cachedEntry && (now - cachedEntry.timestamp) < CACHE_EXPIRATION_MS) {
+
+    if (cachedEntry && now - cachedEntry.timestamp < CACHE_EXPIRATION_MS) {
       setLeaderboardData(cachedEntry.data);
       setIsLoading(false);
       return;

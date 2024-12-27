@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { getGithubProfileURL, lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
 
-
 const formatLeaderboardEntry = (key: keyof Row, row: Row): React.ReactNode => {
   if (key === 'username') {
     return (
