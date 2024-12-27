@@ -1,6 +1,12 @@
 import { Flex, Spinner, Text, Box, Link } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { GitHubOrderBy, LeaderboardType, Row, SortDirection } from '../types';
+import {
+  GitHubOrderBy,
+  LeaderboardHeader,
+  LeaderboardType,
+  Row,
+  SortDirection,
+} from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { getGithubProfileURL, lastUpdated } from '../utils';
@@ -58,7 +64,7 @@ export const GithubLeaderboard: React.FC<Props> = ({
     { value: GitHubOrderBy.Followers, label: 'Followers' },
   ];
 
-  const headers = [
+  const headers: LeaderboardHeader[] = [
     { key: 'rank', label: 'Rank', static: true },
     { key: 'username', label: 'Username', static: true },
     { key: 'totalCommits', label: 'Commits' },
@@ -66,7 +72,7 @@ export const GithubLeaderboard: React.FC<Props> = ({
     { key: 'followers', label: 'Followers' },
   ];
 
-  const getOrderByFromKey = (key: string): GitHubOrderBy | null => {
+  const getOrderByFromKey = (key: keyof Row): GitHubOrderBy | null => {
     switch (key) {
       case 'totalCommits':
         return GitHubOrderBy.Commits;
@@ -79,7 +85,7 @@ export const GithubLeaderboard: React.FC<Props> = ({
     }
   };
 
-  const handleSort = (key: string) => {
+  const handleSort = (key: keyof Row) => {
     const newOrder = getOrderByFromKey(key);
     if (newOrder) {
       // if active column clicked

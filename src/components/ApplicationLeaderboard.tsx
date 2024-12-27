@@ -2,6 +2,7 @@ import { Flex, Spinner, Text, Box } from '@chakra-ui/react';
 import React from 'react';
 import {
   ApplicationOrderBy,
+  LeaderboardHeader,
   LeaderboardType,
   Row,
   SortDirection,
@@ -55,7 +56,7 @@ export const ApplicationLeaderboard: React.FC<Props> = ({
     { value: ApplicationOrderBy.Recent, label: 'Recently Applied' },
   ];
 
-  const headers = [
+  const headers: LeaderboardHeader[] = [
     { key: 'rank', label: 'Rank', static: true },
     { key: 'username', label: 'Username', static: true },
     { key: 'applied', label: 'Applied' },
