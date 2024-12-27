@@ -4,21 +4,29 @@ import { useToast } from '@chakra-ui/react';
 import { getLeaderboardDataHandlerFromType } from '../services/leaderboard';
 import { assertTypeAndOrderingIntegrity } from '../utils';
 
-const leaderboardCache = new Map<string, LeaderboardEntry[]>();
+interface CacheEntry {
+  data: LeaderboardEntry[];
+  timestamp: number;
+}
+
+const leaderboardCache = new Map<string, CacheEntry>();
+// Arbitrary expiration granularity
+const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes
 
 export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>();
   const cacheKey = `${type}-${order}`;
-  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(
-    leaderboardCache.get(cacheKey) || []
-  );
+  const cachedEntry = leaderboardCache.get(cacheKey);
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(cachedEntry?.data || []);
   const toast = useToast();
 
   const fetchData = async () => {
-    const cachedData = leaderboardCache.get(cacheKey);
-    if (cachedData) {
-      setLeaderboardData(cachedData);
+    const cachedEntry = leaderboardCache.get(cacheKey);
+    const now = Date.now();
+    
+    if (cachedEntry && (now - cachedEntry.timestamp) < CACHE_EXPIRATION_MS) {
+      setLeaderboardData(cachedEntry.data);
       return;
     }
 
@@ -29,7 +37,7 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
       const data = await getLeaderboardDataHandlerFromType(type)(order);
       if (data) {
         setLeaderboardData(data);
-        leaderboardCache.set(cacheKey, data);
+        leaderboardCache.set(cacheKey, { data, timestamp: now });
       }
     } catch (e) {
       const errorMessage = (e as Error).message;
