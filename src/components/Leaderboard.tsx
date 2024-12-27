@@ -26,9 +26,9 @@ interface LeaderboardProps {
   orderBy: Ordering;
   sortDirection: SortDirection;
   headers: LeaderboardHeader[];
-  orderColKey: string;
+  orderColKey: keyof Row | '';
   cellFormatter: (key: keyof Row, row: Row) => React.ReactNode;
-  onSort?: (key: string) => void;
+  onSort?: (key: keyof Row) => void;
 }
 
 const Leaderboard: React.FC<LeaderboardProps> = ({

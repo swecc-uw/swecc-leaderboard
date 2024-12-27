@@ -1,6 +1,12 @@
 import { Flex, Spinner, Text, Box, Link } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { LeaderboardType, LeetCodeOrderBy, Row, SortDirection } from '../types';
+import {
+  LeaderboardHeader,
+  LeaderboardType,
+  LeetCodeOrderBy,
+  Row,
+  SortDirection,
+} from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { getLeetcodeProfileURL, lastUpdated } from '../utils';
@@ -75,7 +81,7 @@ export const LeetcodeLeaderboard: React.FC<Props> = ({
     { value: LeetCodeOrderBy.Hard, label: 'Hard Problems' },
   ];
 
-  const headers = [
+  const headers: LeaderboardHeader[] = [
     { key: 'rank', label: 'Rank', static: true },
     { key: 'username', label: 'Username', static: true },
     { key: 'totalSolved', label: 'Total' },
@@ -101,7 +107,7 @@ export const LeetcodeLeaderboard: React.FC<Props> = ({
     }
   };
 
-  const getOrderByFromKey = (key: string): LeetCodeOrderBy | undefined => {
+  const getOrderByFromKey = (key: keyof Row): LeetCodeOrderBy | undefined => {
     switch (key) {
       case 'totalSolved':
         return LeetCodeOrderBy.Total;
@@ -116,7 +122,7 @@ export const LeetcodeLeaderboard: React.FC<Props> = ({
     }
   };
 
-  const handleSort = (key: string) => {
+  const handleSort = (key: keyof Row) => {
     const newOrder = getOrderByFromKey(key);
     if (newOrder) {
       if (newOrder === order) {
