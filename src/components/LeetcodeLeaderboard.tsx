@@ -44,7 +44,9 @@ export const LeetcodeLeaderboard: React.FC<Props> = ({
   order,
   onOrderChange,
 }) => {
-  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  const [sortDirection, setSortDirection] = useState<SortDirection>(
+    SortDirection.Desc
+  );
   const {
     isLoading,
     error,
@@ -118,9 +120,11 @@ export const LeetcodeLeaderboard: React.FC<Props> = ({
     const newOrder = getOrderByFromKey(key);
     if (newOrder) {
       if (newOrder === order) {
-        setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+        setSortDirection((prev) =>
+          prev === SortDirection.Asc ? SortDirection.Desc : SortDirection.Asc
+        );
       } else {
-        setSortDirection('desc');
+        setSortDirection(SortDirection.Desc);
         onOrderChange(newOrder);
       }
     }

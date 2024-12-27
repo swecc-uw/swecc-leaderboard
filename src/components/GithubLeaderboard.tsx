@@ -27,7 +27,9 @@ export const GithubLeaderboard: React.FC<Props> = ({
   order,
   onOrderChange,
 }) => {
-  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  const [sortDirection, setSortDirection] = useState<SortDirection>(
+    SortDirection.Desc
+  );
   const {
     isLoading,
     error,
@@ -82,10 +84,12 @@ export const GithubLeaderboard: React.FC<Props> = ({
     if (newOrder) {
       // if active column clicked
       if (newOrder === order) {
-        setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+        setSortDirection((prev) =>
+          prev === SortDirection.Asc ? SortDirection.Desc : SortDirection.Asc
+        );
       } else {
         // desc by default
-        setSortDirection('desc');
+        setSortDirection(SortDirection.Desc);
         onOrderChange(newOrder);
       }
     }

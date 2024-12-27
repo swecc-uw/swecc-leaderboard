@@ -1,6 +1,11 @@
 import { Flex, Spinner, Text, Box } from '@chakra-ui/react';
 import React from 'react';
-import { ApplicationOrderBy, LeaderboardType, Row } from '../types';
+import {
+  ApplicationOrderBy,
+  LeaderboardType,
+  Row,
+  SortDirection,
+} from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { lastUpdated } from '../utils';
@@ -81,7 +86,7 @@ export const ApplicationLeaderboard: React.FC<Props> = ({
       <Box>
         <Leaderboard
           data={applicationData}
-          sortDirection="desc"
+          sortDirection={SortDirection.Desc}
           orderBy={order}
           orderColKey={orderColKey(order)}
           headers={headers}
