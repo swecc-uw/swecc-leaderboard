@@ -3,30 +3,31 @@ import React from 'react';
 import { ApplicationOrderBy, LeaderboardType, Row } from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
-import { useState } from 'react';
 import { lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
-
-const formatLeaderboardEntry = (key: keyof Row, row: Row): React.ReactNode => {
-  return <Text fontWeight={'medium'}>{row[key]}</Text>;
-};
 
 interface Props {
   type:
     | LeaderboardType.InternshipApplications
     | LeaderboardType.NewGradApplications;
+  order: ApplicationOrderBy;
+  onOrderChange: (order: ApplicationOrderBy) => void;
 }
 
-export const ApplicationLeaderboard: React.FC<Props> = ({ type }) => {
-  const [applicationOrder, setApplicationOrder] = useState<ApplicationOrderBy>(
-    ApplicationOrderBy.Applied
-  );
+const formatLeaderboardEntry = (key: keyof Row, row: Row): React.ReactNode => {
+  return <Text fontWeight={'medium'}>{row[key]}</Text>;
+};
 
+export const ApplicationLeaderboard: React.FC<Props> = ({
+  type,
+  order,
+  onOrderChange,
+}) => {
   const {
     isLoading,
     error,
     leaderboardData: applicationData,
-  } = useLeaderboard(type, applicationOrder);
+  } = useLeaderboard(type, order);
 
   if (isLoading) {
     return (
@@ -72,18 +73,16 @@ export const ApplicationLeaderboard: React.FC<Props> = ({ type }) => {
           Last updated: {lastUpdated(applicationData)}
         </Text>
         <OrderBySelect
-          value={applicationOrder}
-          onChange={(value) => {
-            setApplicationOrder(value as ApplicationOrderBy);
-          }}
+          value={order}
+          onChange={onOrderChange}
           options={applicationOptions}
         />
       </Flex>
       <Box>
         <Leaderboard
           data={applicationData}
-          orderBy={applicationOrder}
-          orderColKey={orderColKey(applicationOrder)}
+          orderBy={order}
+          orderColKey={orderColKey(order)}
           headers={headers}
           cellFormatter={formatLeaderboardEntry}
         />

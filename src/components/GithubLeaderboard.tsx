@@ -3,9 +3,13 @@ import React from 'react';
 import { GitHubOrderBy, LeaderboardType, Row } from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
-import { useState } from 'react';
 import { getGithubProfileURL, lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
+
+interface Props {
+  order: GitHubOrderBy;
+  onOrderChange: (order: GitHubOrderBy) => void;
+}
 
 const formatLeaderboardEntry = (key: keyof Row, row: Row): React.ReactNode => {
   if (key === 'username') {
@@ -19,16 +23,15 @@ const formatLeaderboardEntry = (key: keyof Row, row: Row): React.ReactNode => {
   return <Text fontWeight={'medium'}>{row[key]}</Text>;
 };
 
-export const GithubLeaderboard: React.FC = () => {
-  const [githubOrder, setGithubOrder] = useState<GitHubOrderBy>(
-    GitHubOrderBy.Commits
-  );
-
+export const GithubLeaderboard: React.FC<Props> = ({
+  order,
+  onOrderChange,
+}) => {
   const {
     isLoading,
     error,
     leaderboardData: githubData,
-  } = useLeaderboard(LeaderboardType.GitHub, githubOrder);
+  } = useLeaderboard(LeaderboardType.GitHub, order);
 
   if (isLoading) {
     return (
@@ -80,18 +83,16 @@ export const GithubLeaderboard: React.FC = () => {
           Last updated: {lastUpdated(githubData)}
         </Text>
         <OrderBySelect
-          value={githubOrder}
-          onChange={(value) => {
-            setGithubOrder(value as GitHubOrderBy);
-          }}
+          value={order}
+          onChange={onOrderChange}
           options={githubOptions}
         />
       </Flex>
       <Box>
         <Leaderboard
           data={githubData}
-          orderBy={githubOrder}
-          orderColKey={orderColKey(githubOrder)}
+          orderBy={order}
+          orderColKey={orderColKey(order)}
           headers={headers}
           cellFormatter={formatLeaderboardEntry}
         />

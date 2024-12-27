@@ -8,14 +8,14 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-export const OrderBySelect = ({
+export const OrderBySelect = <T extends string>({
   value,
   onChange,
   options,
 }: {
-  value: string;
-  onChange: (value: string) => void;
-  options: { value: string; label: string }[];
+  value: T;
+  onChange: (value: T) => void;
+  options: { value: T; label: string }[];
 }) => {
   const buttonBg = 'white';
   const buttonBorder = 'gray.200';
