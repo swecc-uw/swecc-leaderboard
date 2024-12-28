@@ -1,6 +1,12 @@
 import { Flex, Spinner, Text, Box, Link } from '@chakra-ui/react';
-import React from 'react';
-import { GitHubOrderBy, LeaderboardType, Row } from '../types';
+import React, { useState } from 'react';
+import {
+  GitHubOrderBy,
+  LeaderboardHeader,
+  LeaderboardType,
+  Row,
+  SortDirection,
+} from '../types';
 import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { getGithubProfileURL, lastUpdated } from '../utils';
@@ -27,6 +33,9 @@ export const GithubLeaderboard: React.FC<Props> = ({
   order,
   onOrderChange,
 }) => {
+  const [sortDirection, setSortDirection] = useState<SortDirection>(
+    SortDirection.Desc
+  );
   const {
     isLoading,
     error,
@@ -55,13 +64,42 @@ export const GithubLeaderboard: React.FC<Props> = ({
     { value: GitHubOrderBy.Followers, label: 'Followers' },
   ];
 
-  const headers = [
-    { key: 'rank', label: 'Rank' },
-    { key: 'username', label: 'Username' },
+  const headers: LeaderboardHeader[] = [
+    { key: 'rank', label: 'Rank', static: true },
+    { key: 'username', label: 'Username', static: true },
     { key: 'totalCommits', label: 'Commits' },
     { key: 'totalPrs', label: 'PRs' },
     { key: 'followers', label: 'Followers' },
   ];
+
+  const getOrderByFromKey = (key: keyof Row): GitHubOrderBy | null => {
+    switch (key) {
+      case 'totalCommits':
+        return GitHubOrderBy.Commits;
+      case 'totalPrs':
+        return GitHubOrderBy.Prs;
+      case 'followers':
+        return GitHubOrderBy.Followers;
+      default:
+        return null;
+    }
+  };
+
+  const handleSort = (key: keyof Row) => {
+    const newOrder = getOrderByFromKey(key);
+    if (newOrder) {
+      // if active column clicked
+      if (newOrder === order) {
+        setSortDirection((prev) =>
+          prev === SortDirection.Asc ? SortDirection.Desc : SortDirection.Asc
+        );
+      } else {
+        // desc by default
+        setSortDirection(SortDirection.Desc);
+        onOrderChange(newOrder);
+      }
+    }
+  };
 
   const orderColKey = (order: GitHubOrderBy) => {
     switch (order) {
@@ -92,9 +130,11 @@ export const GithubLeaderboard: React.FC<Props> = ({
         <Leaderboard
           data={githubData}
           orderBy={order}
+          sortDirection={sortDirection}
           orderColKey={orderColKey(order)}
           headers={headers}
           cellFormatter={formatLeaderboardEntry}
+          onSort={handleSort}
         />
       </Box>
     </Box>

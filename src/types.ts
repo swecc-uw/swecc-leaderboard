@@ -130,8 +130,9 @@ export enum ApplicationOrderBy {
 }
 
 export interface LeaderboardHeader {
-  key: string;
+  key: keyof Row;
   label: string;
+  static?: boolean;
 }
 
 export type Row = {
@@ -144,9 +145,15 @@ export type Row = {
   totalCommits?: number;
   totalPrs?: number;
   followers?: number;
+  applied?: number;
 };
 
 export type Ordering = GitHubOrderBy | LeetCodeOrderBy | ApplicationOrderBy;
 export type LeaderboardDataHandler = (
   order: Ordering
 ) => Promise<LeaderboardEntry[]>;
+
+export enum SortDirection {
+  Asc = 'asc',
+  Desc = 'desc',
+}
