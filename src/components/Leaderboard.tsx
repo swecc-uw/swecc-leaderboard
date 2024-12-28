@@ -42,7 +42,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   // Sort data based on direction
   const sortedData = React.useMemo(() => {
     const sorted = [...data];
-    if (sortDirection === 'asc') {
+    if (sortDirection === SortDirection.Asc) {
       sorted.reverse();
     }
     return sorted;
@@ -92,7 +92,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                       color="gray.400"
                       boxSize={5}
                       transform={
-                        sortDirection === 'desc' ? 'rotate(180deg)' : undefined
+                        sortDirection === SortDirection.Asc ? 'rotate(180deg)' : undefined
                       }
                       transition="transform 0.2s"
                     />
