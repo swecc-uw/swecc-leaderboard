@@ -62,7 +62,7 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
 
   useEffect(() => {
     fetchData();
-  }, [order]);
+  }, [order, type]);
 
   // Only for dev
   if (import.meta.env.DEV && !assertTypeAndOrderingIntegrity(type, order)) {

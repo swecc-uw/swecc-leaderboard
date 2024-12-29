@@ -27,7 +27,9 @@ const LeaderboardPage: React.FC = () => {
   const [githubSortOrder, setGithubSortOrder] = useState<GitHubOrderBy>(
     GitHubOrderBy.Commits
   );
-  const [applicationSortOrder, setApplicationSortOrder] =
+  const [newGradApplicationSortOrder, setNewGradApplicationSortOrder] =
+    useState<ApplicationOrderBy>(ApplicationOrderBy.Applied);
+  const [internshipApplicationSortOrder, setInternshipApplicationSortOrder] =
     useState<ApplicationOrderBy>(ApplicationOrderBy.Applied);
   const borderColor = useColorModeValue('gray.200', 'gray.700');
 
@@ -53,6 +55,7 @@ const LeaderboardPage: React.FC = () => {
       case LeaderboardType.LeetCode:
         return (
           <LeetcodeLeaderboard
+            key="leetcode"
             order={leetcodeSortOrder}
             onOrderChange={setLeetcodeSortOrder}
           />
@@ -60,17 +63,27 @@ const LeaderboardPage: React.FC = () => {
       case LeaderboardType.GitHub:
         return (
           <GithubLeaderboard
+            key="github"
             order={githubSortOrder}
             onOrderChange={setGithubSortOrder}
           />
         );
       case LeaderboardType.NewGradApplications:
+        return (
+          <ApplicationLeaderboard
+            key="new-grad"
+            type={activeTab}
+            order={newGradApplicationSortOrder}
+            onOrderChange={setNewGradApplicationSortOrder}
+          />
+        );
       case LeaderboardType.InternshipApplications:
         return (
           <ApplicationLeaderboard
+            key="internship"
             type={activeTab}
-            order={applicationSortOrder}
-            onOrderChange={setApplicationSortOrder}
+            order={internshipApplicationSortOrder}
+            onOrderChange={setInternshipApplicationSortOrder}
           />
         );
     }
