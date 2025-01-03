@@ -108,6 +108,7 @@ export interface RawAttendanceStats {
     username: string;
   };
   sessions_attended: number;
+  last_updated: string;
 }
 
 export interface AttendanceStats extends LeaderboardEntry {

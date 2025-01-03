@@ -63,12 +63,12 @@ function deserializeApplicationStats({
 function deserializeAttendanceStats({
   member: { username },
   sessions_attended,
+  last_updated,
 }: RawAttendanceStats): AttendanceStats {
-  // Store last updated as current time for now, change when `last_updated` is added to backend
   return {
     username,
     sessionsAttended: sessions_attended,
-    lastUpdated: parseAnyDate(new Date()),
+    lastUpdated: parseAnyDate(last_updated),
   };
 }
 
