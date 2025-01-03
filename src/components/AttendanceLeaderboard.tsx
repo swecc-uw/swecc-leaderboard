@@ -52,7 +52,7 @@ export const AttendanceLeaderboard: React.FC<Props> = ({
     );
   }
 
-  const attendaceOptions = [
+  const attendanceOptions = [
     { value: EngagementOrderBy.Attendance, label: 'Attendance' },
   ];
 
@@ -105,7 +105,7 @@ export const AttendanceLeaderboard: React.FC<Props> = ({
         <OrderBySelect
           value={order}
           onChange={onOrderChange}
-          options={attendaceOptions}
+          options={attendanceOptions}
         />
       </Flex>
       <Box>

@@ -92,7 +92,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                       color="gray.400"
                       boxSize={5}
                       transform={
-                        sortDirection === SortDirection.Asc ? 'rotate(180deg)' : undefined
+                        sortDirection === SortDirection.Asc
+                          ? 'rotate(180deg)'
+                          : undefined
                       }
                       transition="transform 0.2s"
                     />
