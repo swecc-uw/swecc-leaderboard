@@ -11,7 +11,6 @@ import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
-import { devPrint } from './utils/RandomUtils';
 
 interface Props {
   order: EngagementOrderBy;
@@ -19,8 +18,7 @@ interface Props {
 }
 
 const formatLeaderboardEntry = (key: keyof Row, row: Row): React.ReactNode => {
-  devPrint(row);
-  return <Text fontWeight={'medium'}>{row[key]}</Text>;
+  return <Text fontWeight="medium">{row[key]}</Text>;
 };
 
 export const AttendanceLeaderboard: React.FC<Props> = ({
