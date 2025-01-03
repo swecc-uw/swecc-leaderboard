@@ -12,10 +12,12 @@ import {
   LeetCodeOrderBy,
   GitHubOrderBy,
   ApplicationOrderBy,
+  EngagementOrderBy,
 } from '../types';
 import { LeetcodeLeaderboard } from '../components/LeetcodeLeaderboard';
 import { GithubLeaderboard } from '../components/GithubLeaderboard';
 import { ApplicationLeaderboard } from '../components/ApplicationLeaderboard';
+import { AttendanceLeaderboard } from '../components/AttendanceLeaderboard';
 
 const LeaderboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<LeaderboardType>(
@@ -31,6 +33,11 @@ const LeaderboardPage: React.FC = () => {
     useState<ApplicationOrderBy>(ApplicationOrderBy.Applied);
   const [internshipApplicationSortOrder, setInternshipApplicationSortOrder] =
     useState<ApplicationOrderBy>(ApplicationOrderBy.Applied);
+
+  const [engagementOrderBy, setEngagementOrderBy] = useState<EngagementOrderBy>(
+    EngagementOrderBy.Attendance
+  );
+
   const borderColor = useColorModeValue('gray.200', 'gray.700');
 
   const includedLeaderboards = [
@@ -43,6 +50,10 @@ const LeaderboardPage: React.FC = () => {
     {
       type: LeaderboardType.NewGradApplications,
       tabLabel: 'New Grad Applications',
+    },
+    {
+      type: LeaderboardType.Attendance,
+      tabLabel: 'Attendance',
     },
   ];
 
@@ -84,6 +95,13 @@ const LeaderboardPage: React.FC = () => {
             type={activeTab}
             order={internshipApplicationSortOrder}
             onOrderChange={setInternshipApplicationSortOrder}
+          />
+        );
+      case LeaderboardType.Attendance:
+        return (
+          <AttendanceLeaderboard
+            onOrderChange={setEngagementOrderBy}
+            order={engagementOrderBy}
           />
         );
     }

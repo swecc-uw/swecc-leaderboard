@@ -163,6 +163,7 @@ export type Row = {
   totalPrs?: number;
   followers?: number;
   applied?: number;
+  sessionsAttended?: number;
 };
 
 export type Ordering =
