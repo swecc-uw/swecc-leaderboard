@@ -5,6 +5,7 @@ import {
   LeaderboardType,
   LeetCodeOrderBy,
   LeaderboardEntry,
+  EngagementOrderBy,
 } from './types';
 import { formatDate } from './localization';
 
@@ -43,6 +44,10 @@ export const assertTypeAndOrderingIntegrity = (
     case LeaderboardType.NewGradApplications:
       return Object.values(ApplicationOrderBy).includes(
         orderBy as ApplicationOrderBy
+      );
+    case LeaderboardType.Attendance:
+      return Object.values(EngagementOrderBy).includes(
+        orderBy as EngagementOrderBy
       );
     default:
       return false;

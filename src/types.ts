@@ -102,11 +102,25 @@ export interface ApplicationStats extends LeaderboardEntry {
   applied: number;
 }
 
+export interface RawAttendanceStats {
+  id: number;
+  member: {
+    username: string;
+  };
+  sessions_attended: number;
+  last_updated: string;
+}
+
+export interface AttendanceStats extends LeaderboardEntry {
+  sessionsAttended: number;
+}
+
 export enum LeaderboardType {
   LeetCode = 'leetcode',
   GitHub = 'github',
   InternshipApplications = 'internship-applications',
   NewGradApplications = 'new-grad-application',
+  Attendance = 'attendance',
 }
 
 export enum LeetCodeOrderBy {
@@ -129,6 +143,10 @@ export enum ApplicationOrderBy {
   Recent = 'recent',
 }
 
+export enum EngagementOrderBy {
+  Attendance = 'attendance',
+}
+
 export interface LeaderboardHeader {
   key: keyof Row;
   label: string;
@@ -146,9 +164,14 @@ export type Row = {
   totalPrs?: number;
   followers?: number;
   applied?: number;
+  sessionsAttended?: number;
 };
 
-export type Ordering = GitHubOrderBy | LeetCodeOrderBy | ApplicationOrderBy;
+export type Ordering =
+  | GitHubOrderBy
+  | LeetCodeOrderBy
+  | ApplicationOrderBy
+  | EngagementOrderBy;
 export type LeaderboardDataHandler = (
   order: Ordering
 ) => Promise<LeaderboardEntry[]>;
