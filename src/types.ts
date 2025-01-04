@@ -102,6 +102,13 @@ export interface ApplicationStats extends LeaderboardEntry {
   applied: number;
 }
 
+export interface RawPaginatedAttendanceResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: RawAttendanceStats[];
+}
+
 export interface RawAttendanceStats {
   id: number;
   member: {
@@ -113,6 +120,12 @@ export interface RawAttendanceStats {
 
 export interface AttendanceStats extends LeaderboardEntry {
   sessionsAttended: number;
+}
+
+export interface PaginatedAttendanceResponse {
+  next: string | null;
+  previous: string | null;
+  data: AttendanceStats[];
 }
 
 export enum LeaderboardType {
@@ -173,10 +186,17 @@ export type Ordering =
   | ApplicationOrderBy
   | EngagementOrderBy;
 export type LeaderboardDataHandler = (
-  order: Ordering
-) => Promise<LeaderboardEntry[]>;
+  order: Ordering,
+  pageUrl?: string
+) => Promise<PaginatedLeaderboardResponse>;
 
 export enum SortDirection {
   Asc = 'asc',
   Desc = 'desc',
 }
+
+export type PaginatedLeaderboardResponse = {
+  next: string | null;
+  previous: string | null;
+  data: LeaderboardEntry[];
+};
