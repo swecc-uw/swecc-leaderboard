@@ -158,10 +158,11 @@ export function getNewGradLeaderboard(
 }
 
 export function getAttendanceLeaderboard(
-  orderBy: EngagementOrderBy = EngagementOrderBy.Attendance
+  orderBy: EngagementOrderBy = EngagementOrderBy.Attendance,
+  pageUrl?: string
 ): Promise<void | PaginatedLeaderboardResponse> {
   return api
-    .get(`/leaderboard/attendance/?order_by=${orderBy}`)
+    .get(pageUrl ?? `/leaderboard/attendance/?order_by=${orderBy}`)
     .then((res) => {
       if (res.status !== 200) {
         throw new Error('Failed to get attendance leaderboard');

@@ -186,7 +186,8 @@ export type Ordering =
   | ApplicationOrderBy
   | EngagementOrderBy;
 export type LeaderboardDataHandler = (
-  order: Ordering
+  order: Ordering,
+  pageUrl?: string
 ) => Promise<PaginatedLeaderboardResponse>;
 
 export enum SortDirection {

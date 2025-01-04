@@ -13,7 +13,11 @@ const leaderboardCache = new Map<string, CacheEntry>();
 // Arbitrary expiration granularity
 const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes
 
-export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
+export const useLeaderboard = (
+  type: LeaderboardType,
+  order: Ordering,
+  pageUrl?: string
+) => {
   const cacheKey = `${type}-${order}`;
   const cachedEntry = leaderboardCache.get(cacheKey);
   const isCacheValid =
@@ -25,6 +29,9 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
     cachedEntry?.data || []
   );
   const toast = useToast();
+
+  const [nextPage, setNextPage] = useState<string | null>(null);
+  const [previousPage, setPreviousPage] = useState<string | null>(null);
 
   const fetchData = async () => {
     const cachedEntry = leaderboardCache.get(cacheKey);
@@ -41,7 +48,8 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
 
     try {
       const paginatedResponse = await getLeaderboardDataHandlerFromType(type)(
-        order
+        order,
+        pageUrl
       );
       if (paginatedResponse.data) {
         setLeaderboardData(paginatedResponse.data);
@@ -50,6 +58,8 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
           timestamp: now,
         });
       }
+      setNextPage(paginatedResponse.next);
+      setPreviousPage(paginatedResponse.previous);
     } catch (e) {
       const errorMessage = (e as Error).message;
       setError(errorMessage);
@@ -67,7 +77,7 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
 
   useEffect(() => {
     fetchData();
-  }, [order, type]);
+  }, [order, type, pageUrl]);
 
   // Only for dev
   if (import.meta.env.DEV && !assertTypeAndOrderingIntegrity(type, order)) {
@@ -78,5 +88,5 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
     };
   }
 
-  return { isLoading, error, leaderboardData };
+  return { isLoading, error, leaderboardData, nextPage, previousPage };
 };
