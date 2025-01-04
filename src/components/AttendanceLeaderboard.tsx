@@ -121,7 +121,7 @@ export const AttendanceLeaderboard: React.FC<Props> = ({
           cellFormatter={formatLeaderboardEntry}
           onSort={handleSort}
         />
-        <HStack w="100%" justify={'center'} mt={2}>
+        <HStack w="100%" justify="center" mt={2}>
           <Button
             isDisabled={!previousPage}
             onClick={() => {
