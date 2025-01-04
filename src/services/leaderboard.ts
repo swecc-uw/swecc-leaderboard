@@ -15,6 +15,9 @@ import {
   RawAttendanceStats,
   AttendanceStats,
   EngagementOrderBy,
+  RawPaginatedAttendanceResponse,
+  PaginatedAttendanceResponse,
+  PaginatedLeaderboardResponse,
 } from '../types';
 import { devPrint } from '../components/utils/RandomUtils';
 
@@ -72,35 +75,53 @@ function deserializeAttendanceStats({
   };
 }
 
+function deserializePaginatedAttendaceResponse({
+  results,
+  ...rest
+}: RawPaginatedAttendanceResponse): PaginatedAttendanceResponse {
+  return {
+    data: results.map(deserializeAttendanceStats),
+    ...rest,
+  };
+}
+
 export function getLeetcodeLeaderboard(
   orderBy: LeetCodeOrderBy = LeetCodeOrderBy.Total
-): Promise<LeetCodeStats[]> {
+): Promise<void | PaginatedLeaderboardResponse> {
   return api
     .get(`/leaderboard/leetcode/?order_by=${orderBy}`)
     .then((res) => {
       if (res.status !== 200)
         throw new Error('Failed to get leetcode leaderboard');
-      return res.data.map(deserializeLeetCodeStats);
+      return {
+        next: null,
+        previous: null,
+        data: res.data.map(deserializeLeetCodeStats),
+      };
     })
     .catch(devPrint);
 }
 
 export function getGitHubLeaderboard(
   orderBy: GitHubOrderBy = GitHubOrderBy.Commits
-): Promise<GitHubStats[]> {
+): Promise<void | PaginatedLeaderboardResponse> {
   return api
     .get(`/leaderboard/github/?order_by=${orderBy}`)
     .then((res) => {
       if (res.status !== 200)
         throw new Error('Failed to get github leaderboard');
-      return res.data.map(deserializeGitHubStats);
+      return {
+        next: null,
+        previous: null,
+        data: res.data.map(deserializeGitHubStats),
+      };
     })
     .catch(devPrint);
 }
 
 export function getInternshipLeaderboard(
   orderBy: ApplicationOrderBy = ApplicationOrderBy.Applied
-): Promise<ApplicationStats[]> {
+): Promise<void | PaginatedLeaderboardResponse> {
   return api
     .get(`/leaderboard/internship/?order_by=${orderBy}`)
     .then((res) => {
@@ -108,14 +129,18 @@ export function getInternshipLeaderboard(
         throw new Error('Failed to get internship application leaderboard');
       }
 
-      return res.data.map(deserializeApplicationStats);
+      return {
+        next: null,
+        previous: null,
+        data: res.data.map(deserializeApplicationStats),
+      };
     })
     .catch(devPrint);
 }
 
 export function getNewGradLeaderboard(
   orderBy: ApplicationOrderBy = ApplicationOrderBy.Applied
-): Promise<ApplicationStats[]> {
+): Promise<void | PaginatedLeaderboardResponse> {
   return api
     .get(`/leaderboard/newgrad/?order_by=${orderBy}`)
     .then((res) => {
@@ -123,14 +148,18 @@ export function getNewGradLeaderboard(
         throw new Error('Failed to get new grad application leaderboard');
       }
 
-      return res.data.map(deserializeApplicationStats);
+      return {
+        data: res.data.map(deserializeApplicationStats),
+        next: null,
+        previous: null,
+      };
     })
     .catch(devPrint);
 }
 
 export function getAttendanceLeaderboard(
   orderBy: EngagementOrderBy = EngagementOrderBy.Attendance
-): Promise<ApplicationStats[]> {
+): Promise<void | PaginatedLeaderboardResponse> {
   return api
     .get(`/leaderboard/attendance/?order_by=${orderBy}`)
     .then((res) => {
@@ -138,7 +167,11 @@ export function getAttendanceLeaderboard(
         throw new Error('Failed to get attendance leaderboard');
       }
 
-      return res.data.map(deserializeAttendanceStats);
+      const deserializedResponse = deserializePaginatedAttendaceResponse(
+        res.data
+      );
+
+      return deserializedResponse;
     })
     .catch(devPrint);
 }

@@ -40,10 +40,15 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
     setError(undefined);
 
     try {
-      const data = await getLeaderboardDataHandlerFromType(type)(order);
-      if (data) {
-        setLeaderboardData(data);
-        leaderboardCache.set(cacheKey, { data, timestamp: now });
+      const paginatedResponse = await getLeaderboardDataHandlerFromType(type)(
+        order
+      );
+      if (paginatedResponse.data) {
+        setLeaderboardData(paginatedResponse.data);
+        leaderboardCache.set(cacheKey, {
+          data: paginatedResponse.data,
+          timestamp: now,
+        });
       }
     } catch (e) {
       const errorMessage = (e as Error).message;

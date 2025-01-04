@@ -123,10 +123,9 @@ export interface AttendanceStats extends LeaderboardEntry {
 }
 
 export interface PaginatedAttendanceResponse {
-  count: number;
   next: string | null;
   previous: string | null;
-  results: AttendanceStats[];
+  data: AttendanceStats[];
 }
 
 export enum LeaderboardType {
@@ -188,9 +187,15 @@ export type Ordering =
   | EngagementOrderBy;
 export type LeaderboardDataHandler = (
   order: Ordering
-) => Promise<LeaderboardEntry[]>;
+) => Promise<PaginatedLeaderboardResponse>;
 
 export enum SortDirection {
   Asc = 'asc',
   Desc = 'desc',
 }
+
+export type PaginatedLeaderboardResponse = {
+  next: string | null;
+  previous: string | null;
+  data: LeaderboardEntry[];
+};
