@@ -11,7 +11,6 @@ import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
-import { devPrint } from './utils/RandomUtils';
 
 interface Props {
   order: EngagementOrderBy;
@@ -135,7 +134,6 @@ export const AttendanceLeaderboard: React.FC<Props> = ({
             isDisabled={!nextPage}
             onClick={() => {
               setPageUrl(nextPage!);
-              devPrint(nextPage);
             }}
           >
             Next

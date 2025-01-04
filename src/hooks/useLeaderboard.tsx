@@ -3,7 +3,6 @@ import { LeaderboardType, Ordering, LeaderboardEntry } from '../types';
 import { useToast } from '@chakra-ui/react';
 import { getLeaderboardDataHandlerFromType } from '../services/leaderboard';
 import { assertTypeAndOrderingIntegrity } from '../utils';
-import { devPrint } from '../components/utils/RandomUtils';
 
 interface CacheEntry {
   data: LeaderboardEntry[];
@@ -52,12 +51,10 @@ export const useLeaderboard = (
     setError(undefined);
 
     try {
-      devPrint(pageUrl);
       const paginatedResponse = await getLeaderboardDataHandlerFromType(type)(
         order,
         pageUrl
       );
-      devPrint(paginatedResponse);
       if (paginatedResponse.data) {
         setLeaderboardData(paginatedResponse.data);
         leaderboardCache.set(cacheKey, {
