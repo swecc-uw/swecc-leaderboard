@@ -75,7 +75,7 @@ function deserializeAttendanceStats({
   };
 }
 
-function deserializePaginatedAttendaceResponse({
+function deserializePaginatedAttendanceResponse({
   results,
   ...rest
 }: RawPaginatedAttendanceResponse): PaginatedAttendanceResponse {
@@ -168,7 +168,7 @@ export function getAttendanceLeaderboard(
         throw new Error('Failed to get attendance leaderboard');
       }
 
-      const deserializedResponse = deserializePaginatedAttendaceResponse(
+      const deserializedResponse = deserializePaginatedAttendanceResponse(
         res.data
       );
 

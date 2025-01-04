@@ -3,9 +3,12 @@ import { LeaderboardType, Ordering, LeaderboardEntry } from '../types';
 import { useToast } from '@chakra-ui/react';
 import { getLeaderboardDataHandlerFromType } from '../services/leaderboard';
 import { assertTypeAndOrderingIntegrity } from '../utils';
+import { devPrint } from '../components/utils/RandomUtils';
 
 interface CacheEntry {
   data: LeaderboardEntry[];
+  next: string | null;
+  previous: string | null;
   timestamp: number;
 }
 
@@ -18,7 +21,7 @@ export const useLeaderboard = (
   order: Ordering,
   pageUrl?: string
 ) => {
-  const cacheKey = `${type}-${order}`;
+  const cacheKey = `${type}-${order}-${pageUrl}`;
   const cachedEntry = leaderboardCache.get(cacheKey);
   const isCacheValid =
     cachedEntry && Date.now() - cachedEntry.timestamp < CACHE_EXPIRATION_MS;
@@ -39,6 +42,8 @@ export const useLeaderboard = (
 
     if (cachedEntry && now - cachedEntry.timestamp < CACHE_EXPIRATION_MS) {
       setLeaderboardData(cachedEntry.data);
+      setNextPage(cachedEntry.next);
+      setPreviousPage(cachedEntry.previous);
       setIsLoading(false);
       return;
     }
@@ -47,15 +52,17 @@ export const useLeaderboard = (
     setError(undefined);
 
     try {
+      devPrint(pageUrl);
       const paginatedResponse = await getLeaderboardDataHandlerFromType(type)(
         order,
         pageUrl
       );
+      devPrint(paginatedResponse);
       if (paginatedResponse.data) {
         setLeaderboardData(paginatedResponse.data);
         leaderboardCache.set(cacheKey, {
-          data: paginatedResponse.data,
           timestamp: now,
+          ...paginatedResponse,
         });
       }
       setNextPage(paginatedResponse.next);

@@ -1,4 +1,4 @@
-import { Flex, Spinner, Text, Box } from '@chakra-ui/react';
+import { Flex, Spinner, Text, Box, HStack, Button } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import {
   EngagementOrderBy,
@@ -11,6 +11,7 @@ import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
+import { devPrint } from './utils/RandomUtils';
 
 interface Props {
   order: EngagementOrderBy;
@@ -28,11 +29,16 @@ export const AttendanceLeaderboard: React.FC<Props> = ({
   const [sortDirection, setSortDirection] = useState<SortDirection>(
     SortDirection.Desc
   );
+
+  const [pageUrl, setPageUrl] = useState<string>();
+
   const {
     isLoading,
     error,
     leaderboardData: attendanceData,
-  } = useLeaderboard(LeaderboardType.Attendance, order);
+    nextPage,
+    previousPage,
+  } = useLeaderboard(LeaderboardType.Attendance, order, pageUrl);
 
   if (isLoading) {
     return (
@@ -116,6 +122,25 @@ export const AttendanceLeaderboard: React.FC<Props> = ({
           cellFormatter={formatLeaderboardEntry}
           onSort={handleSort}
         />
+        <HStack w="100%" justify={'center'} mt={2}>
+          <Button
+            isDisabled={!previousPage}
+            onClick={() => {
+              setPageUrl(previousPage!);
+            }}
+          >
+            Previous
+          </Button>
+          <Button
+            isDisabled={!nextPage}
+            onClick={() => {
+              setPageUrl(nextPage!);
+              devPrint(nextPage);
+            }}
+          >
+            Next
+          </Button>
+        </HStack>
       </Box>
     </Box>
   );
