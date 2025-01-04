@@ -119,7 +119,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                   fontSize={header.key === 'username' ? 'sm' : 'xs'}
                 >
                   {Cell(
-                    { ...row, rank: rankMap.get(row.username) },
+                    { ...row, rank: row.rank ?? rankMap.get(row.username) },
                     headers,
                     header,
                     cellFormatter

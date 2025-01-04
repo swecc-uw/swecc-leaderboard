@@ -67,11 +67,13 @@ function deserializeAttendanceStats({
   member: { username },
   sessions_attended,
   last_updated,
+  ...rest
 }: RawAttendanceStats): AttendanceStats {
   return {
     username,
     sessionsAttended: sessions_attended,
     lastUpdated: parseAnyDate(last_updated),
+    ...rest,
   };
 }
 

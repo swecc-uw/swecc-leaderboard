@@ -54,6 +54,7 @@ export interface DetailedResponse {
 export interface LeaderboardEntry {
   username: string;
   lastUpdated: Date;
+  rank?: number;
 }
 
 export interface RawGitHubStats {
@@ -116,6 +117,7 @@ export interface RawAttendanceStats {
   };
   sessions_attended: number;
   last_updated: string;
+  rank: number;
 }
 
 export interface AttendanceStats extends LeaderboardEntry {
