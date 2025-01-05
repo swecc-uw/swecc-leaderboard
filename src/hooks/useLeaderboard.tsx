@@ -6,6 +6,8 @@ import { assertTypeAndOrderingIntegrity } from '../utils';
 
 interface CacheEntry {
   data: LeaderboardEntry[];
+  next: string | null;
+  previous: string | null;
   timestamp: number;
 }
 
@@ -13,8 +15,12 @@ const leaderboardCache = new Map<string, CacheEntry>();
 // Arbitrary expiration granularity
 const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes
 
-export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
-  const cacheKey = `${type}-${order}`;
+export const useLeaderboard = (
+  type: LeaderboardType,
+  order: Ordering,
+  pageUrl?: string
+) => {
+  const cacheKey = `${type}-${order}-${pageUrl}`;
   const cachedEntry = leaderboardCache.get(cacheKey);
   const isCacheValid =
     cachedEntry && Date.now() - cachedEntry.timestamp < CACHE_EXPIRATION_MS;
@@ -26,12 +32,17 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
   );
   const toast = useToast();
 
+  const [nextPage, setNextPage] = useState<string | null>(null);
+  const [previousPage, setPreviousPage] = useState<string | null>(null);
+
   const fetchData = async () => {
     const cachedEntry = leaderboardCache.get(cacheKey);
     const now = Date.now();
 
     if (cachedEntry && now - cachedEntry.timestamp < CACHE_EXPIRATION_MS) {
       setLeaderboardData(cachedEntry.data);
+      setNextPage(cachedEntry.next);
+      setPreviousPage(cachedEntry.previous);
       setIsLoading(false);
       return;
     }
@@ -40,11 +51,19 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
     setError(undefined);
 
     try {
-      const data = await getLeaderboardDataHandlerFromType(type)(order);
-      if (data) {
-        setLeaderboardData(data);
-        leaderboardCache.set(cacheKey, { data, timestamp: now });
+      const paginatedResponse = await getLeaderboardDataHandlerFromType(type)(
+        order,
+        pageUrl
+      );
+      if (paginatedResponse.data) {
+        setLeaderboardData(paginatedResponse.data);
+        leaderboardCache.set(cacheKey, {
+          timestamp: now,
+          ...paginatedResponse,
+        });
       }
+      setNextPage(paginatedResponse.next);
+      setPreviousPage(paginatedResponse.previous);
     } catch (e) {
       const errorMessage = (e as Error).message;
       setError(errorMessage);
@@ -62,7 +81,7 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
 
   useEffect(() => {
     fetchData();
-  }, [order, type]);
+  }, [order, type, pageUrl]);
 
   // Only for dev
   if (import.meta.env.DEV && !assertTypeAndOrderingIntegrity(type, order)) {
@@ -73,5 +92,5 @@ export const useLeaderboard = (type: LeaderboardType, order: Ordering) => {
     };
   }
 
-  return { isLoading, error, leaderboardData };
+  return { isLoading, error, leaderboardData, nextPage, previousPage };
 };
