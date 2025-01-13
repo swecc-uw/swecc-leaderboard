@@ -159,12 +159,17 @@ export function getNewGradLeaderboard(
     .catch(devPrint);
 }
 
+export const ATTENDANCE_PAGE_SIZE = 50;
+
 export function getAttendanceLeaderboard(
   orderBy: EngagementOrderBy = EngagementOrderBy.Attendance,
-  pageUrl?: string
+  page: number = 1,
+  pageSize: number = ATTENDANCE_PAGE_SIZE
 ): Promise<void | PaginatedLeaderboardResponse> {
   return api
-    .get(pageUrl ?? `/leaderboard/attendance/?order_by=${orderBy}`)
+    .get(
+      `/leaderboard/attendance/?order_by=${orderBy}&page=${page}&page_size=${pageSize}`
+    )
     .then((res) => {
       if (res.status !== 200) {
         throw new Error('Failed to get attendance leaderboard');
