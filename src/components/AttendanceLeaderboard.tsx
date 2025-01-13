@@ -11,6 +11,7 @@ import Leaderboard from './Leaderboard';
 import { OrderBySelect } from './OrderBySelect';
 import { lastUpdated } from '../utils';
 import { useLeaderboard } from '../hooks/useLeaderboard';
+import { ATTENDANCE_PAGE_SIZE } from '../services/leaderboard';
 
 interface Props {
   order: EngagementOrderBy;
@@ -29,15 +30,16 @@ export const AttendanceLeaderboard: React.FC<Props> = ({
     SortDirection.Desc
   );
 
-  const [pageUrl, setPageUrl] = useState<string>();
+  const [page, setPage] = useState(1);
 
   const {
     isLoading,
     error,
     leaderboardData: attendanceData,
-    nextPage,
-    previousPage,
-  } = useLeaderboard(LeaderboardType.Attendance, order, pageUrl);
+    count,
+  } = useLeaderboard(LeaderboardType.Attendance, order, page);
+
+  const totalPages = Math.ceil(count! / ATTENDANCE_PAGE_SIZE);
 
   if (isLoading) {
     return (
@@ -123,17 +125,17 @@ export const AttendanceLeaderboard: React.FC<Props> = ({
         />
         <HStack w="100%" justify="center" mt={2}>
           <Button
-            isDisabled={!previousPage}
+            isDisabled={!(page > 1)}
             onClick={() => {
-              setPageUrl(previousPage!);
+              setPage(page - 1);
             }}
           >
             Previous
           </Button>
           <Button
-            isDisabled={!nextPage}
+            isDisabled={!(page < totalPages)}
             onClick={() => {
-              setPageUrl(nextPage!);
+              setPage(page + 1);
             }}
           >
             Next

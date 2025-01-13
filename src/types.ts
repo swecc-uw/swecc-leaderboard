@@ -128,6 +128,7 @@ export interface PaginatedAttendanceResponse {
   next: string | null;
   previous: string | null;
   data: AttendanceStats[];
+  count: number;
 }
 
 export enum LeaderboardType {
@@ -189,7 +190,8 @@ export type Ordering =
   | EngagementOrderBy;
 export type LeaderboardDataHandler = (
   order: Ordering,
-  pageUrl?: string
+  page?: number,
+  pageSize?: number
 ) => Promise<PaginatedLeaderboardResponse>;
 
 export enum SortDirection {
@@ -201,4 +203,5 @@ export type PaginatedLeaderboardResponse = {
   next: string | null;
   previous: string | null;
   data: LeaderboardEntry[];
+  count?: number;
 };

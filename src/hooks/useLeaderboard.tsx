@@ -6,8 +6,7 @@ import { assertTypeAndOrderingIntegrity } from '../utils';
 
 interface CacheEntry {
   data: LeaderboardEntry[];
-  next: string | null;
-  previous: string | null;
+  count?: number;
   timestamp: number;
 }
 
@@ -18,9 +17,9 @@ const CACHE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes
 export const useLeaderboard = (
   type: LeaderboardType,
   order: Ordering,
-  pageUrl?: string
+  page: number = 1
 ) => {
-  const cacheKey = `${type}-${order}-${pageUrl}`;
+  const cacheKey = `${type}-${order}-${page}`;
   const cachedEntry = leaderboardCache.get(cacheKey);
   const isCacheValid =
     cachedEntry && Date.now() - cachedEntry.timestamp < CACHE_EXPIRATION_MS;
@@ -32,8 +31,7 @@ export const useLeaderboard = (
   );
   const toast = useToast();
 
-  const [nextPage, setNextPage] = useState<string | null>(null);
-  const [previousPage, setPreviousPage] = useState<string | null>(null);
+  const [count, setCount] = useState<number>();
 
   const fetchData = async () => {
     const cachedEntry = leaderboardCache.get(cacheKey);
@@ -41,8 +39,7 @@ export const useLeaderboard = (
 
     if (cachedEntry && now - cachedEntry.timestamp < CACHE_EXPIRATION_MS) {
       setLeaderboardData(cachedEntry.data);
-      setNextPage(cachedEntry.next);
-      setPreviousPage(cachedEntry.previous);
+      setCount(cachedEntry.count);
       setIsLoading(false);
       return;
     }
@@ -53,7 +50,7 @@ export const useLeaderboard = (
     try {
       const paginatedResponse = await getLeaderboardDataHandlerFromType(type)(
         order,
-        pageUrl
+        page
       );
       if (paginatedResponse.data) {
         setLeaderboardData(paginatedResponse.data);
@@ -62,8 +59,8 @@ export const useLeaderboard = (
           ...paginatedResponse,
         });
       }
-      setNextPage(paginatedResponse.next);
-      setPreviousPage(paginatedResponse.previous);
+
+      setCount(paginatedResponse.count);
     } catch (e) {
       const errorMessage = (e as Error).message;
       setError(errorMessage);
@@ -81,7 +78,7 @@ export const useLeaderboard = (
 
   useEffect(() => {
     fetchData();
-  }, [order, type, pageUrl]);
+  }, [order, type, page]);
 
   // Only for dev
   if (import.meta.env.DEV && !assertTypeAndOrderingIntegrity(type, order)) {
@@ -92,5 +89,5 @@ export const useLeaderboard = (
     };
   }
 
-  return { isLoading, error, leaderboardData, nextPage, previousPage };
+  return { isLoading, error, leaderboardData, count };
 };
