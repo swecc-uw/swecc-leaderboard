@@ -125,7 +125,7 @@ export const AttendanceLeaderboard: React.FC<Props> = ({
         />
         <HStack w="100%" justify="center" mt={2}>
           <Button
-            isDisabled={!(page > 1)}
+            isDisabled={page == 1}
             onClick={() => {
               setPage(page - 1);
             }}
@@ -133,7 +133,7 @@ export const AttendanceLeaderboard: React.FC<Props> = ({
             Previous
           </Button>
           <Button
-            isDisabled={!(page < totalPages)}
+            isDisabled={page == totalPages}
             onClick={() => {
               setPage(page + 1);
             }}
