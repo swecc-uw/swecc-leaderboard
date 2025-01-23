@@ -115,7 +115,7 @@ export function getGitHubLeaderboard(
       return {
         next: null,
         previous: null,
-        data: res.data.results.map(deserializeGitHubStats),
+        data: res.data.map(deserializeGitHubStats),
       };
     })
     .catch(devPrint);
