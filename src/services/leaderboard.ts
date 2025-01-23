@@ -98,7 +98,7 @@ export function getLeetcodeLeaderboard(
       return {
         next: null,
         previous: null,
-        data: res.data.map(deserializeLeetCodeStats),
+        data: res.data.results.map(deserializeLeetCodeStats),
       };
     })
     .catch(devPrint);
@@ -115,7 +115,7 @@ export function getGitHubLeaderboard(
       return {
         next: null,
         previous: null,
-        data: res.data.map(deserializeGitHubStats),
+        data: res.data.results.map(deserializeGitHubStats),
       };
     })
     .catch(devPrint);
