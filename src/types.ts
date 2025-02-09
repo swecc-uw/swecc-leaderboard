@@ -137,6 +137,7 @@ export enum LeaderboardType {
   InternshipApplications = 'internship-applications',
   NewGradApplications = 'new-grad-application',
   Attendance = 'attendance',
+  CohortStats = 'cohort-stats',
 }
 
 export enum LeetCodeOrderBy {
@@ -163,6 +164,14 @@ export enum EngagementOrderBy {
   Attendance = 'attendance',
 }
 
+export enum CohortStatsOrderBy {
+  DailyCheck = 'daily_check',
+  Applications = 'applications',
+  OnlineAssessments = 'online_assessments',
+  Interviews = 'interviews',
+  Offers = 'offers',
+}
+
 export interface LeaderboardHeader {
   key: keyof Row;
   label: string;
@@ -181,13 +190,21 @@ export type Row = {
   followers?: number;
   applied?: number;
   sessionsAttended?: number;
+  onlineAssessments?: number;
+  applications?: number;
+  interviews?: number;
+  offers?: number;
+  dailyCheck?: number;
+  cohortName?: string;
 };
 
 export type Ordering =
   | GitHubOrderBy
   | LeetCodeOrderBy
   | ApplicationOrderBy
-  | EngagementOrderBy;
+  | EngagementOrderBy
+  | CohortStatsOrderBy;
+
 export type LeaderboardDataHandler = (
   order: Ordering,
   page?: number,
@@ -205,3 +222,47 @@ export type PaginatedLeaderboardResponse = {
   data: LeaderboardEntry[];
   count?: number;
 };
+export interface RawCohortData {
+  id: number;
+  name: string;
+  members: RawMemberData[];
+}
+
+export interface Cohort {
+  id: number;
+  name: string;
+  members: Member[];
+}
+
+export interface RawCohortStats {
+  cohort: RawCohortData;
+  daily_checks: number;
+  member: { username: string };
+  applications: number;
+  online_assessments: number;
+  offers: number;
+  interviews: number;
+}
+
+export interface CohortStats extends LeaderboardEntry {
+  dailyCheck: number;
+  applications: number;
+  onlineAssessments: number;
+  interviews: number;
+  offers: number;
+  cohortName: string;
+}
+
+export interface RawPaginatedCohortStatsResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: RawCohortStats[];
+}
+
+export interface PaginatedCohortStatsResponse {
+  next: string | null;
+  previous: string | null;
+  data: CohortStats[];
+  count: number;
+}
