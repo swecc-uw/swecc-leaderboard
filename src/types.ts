@@ -190,6 +190,11 @@ export type Row = {
   followers?: number;
   applied?: number;
   sessionsAttended?: number;
+  onlineAssessments?: number;
+  applications?: number;
+  interviews?: number;
+  offers?: number;
+  dailyCheck?: number;
 };
 
 export type Ordering =

@@ -13,11 +13,13 @@ import {
   GitHubOrderBy,
   ApplicationOrderBy,
   EngagementOrderBy,
+  CohortStatsOrderBy,
 } from '../types';
 import { LeetcodeLeaderboard } from '../components/LeetcodeLeaderboard';
 import { GithubLeaderboard } from '../components/GithubLeaderboard';
 import { ApplicationLeaderboard } from '../components/ApplicationLeaderboard';
 import { AttendanceLeaderboard } from '../components/AttendanceLeaderboard';
+import { CohortStatsLeaderboard } from '../components/CohortStatsLeaderboard';
 
 const LeaderboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<LeaderboardType>(
@@ -38,6 +40,9 @@ const LeaderboardPage: React.FC = () => {
     EngagementOrderBy.Attendance
   );
 
+  const [cohortStatsOrderBy, setCohortStatsOrderBy] =
+    useState<CohortStatsOrderBy>(CohortStatsOrderBy.DailyCheck);
+
   const borderColor = useColorModeValue('gray.200', 'gray.700');
 
   const includedLeaderboards = [
@@ -54,6 +59,10 @@ const LeaderboardPage: React.FC = () => {
     {
       type: LeaderboardType.Attendance,
       tabLabel: 'Attendance',
+    },
+    {
+      type: LeaderboardType.CohortStats,
+      tabLabel: 'Cohort Stats',
     },
   ];
 
@@ -102,6 +111,13 @@ const LeaderboardPage: React.FC = () => {
           <AttendanceLeaderboard
             onOrderChange={setEngagementOrderBy}
             order={engagementOrderBy}
+          />
+        );
+      case LeaderboardType.CohortStats:
+        return (
+          <CohortStatsLeaderboard
+            onOrderChange={setCohortStatsOrderBy}
+            order={cohortStatsOrderBy}
           />
         );
     }
