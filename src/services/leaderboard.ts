@@ -95,14 +95,14 @@ function deserializePaginatedAttendanceResponse({
 
 function deserializeCohortStats({
   member: { username },
-  daily_check,
+  daily_checks,
   online_assessments,
   cohort,
   ...rest
 }: RawCohortStats): CohortStats {
   return {
     username,
-    dailyCheck: daily_check,
+    dailyCheck: daily_checks,
     onlineAssessments: online_assessments,
     lastUpdated: new Date(),
     cohort: deserializeCohortData(cohort),

@@ -235,7 +235,7 @@ export interface Cohort {
 
 export interface RawCohortStats {
   cohort: RawCohortData;
-  daily_check: number;
+  daily_checks: number;
   member: { username: string };
   applications: number;
   online_assessments: number;
