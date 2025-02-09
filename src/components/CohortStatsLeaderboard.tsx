@@ -76,6 +76,7 @@ export const CohortStatsLeaderboard: React.FC<Props> = ({
     { key: 'interviews', label: 'Interviews', static: false },
     { key: 'offers', label: 'Offers', static: false },
     { key: 'onlineAssessments', label: 'Online Assessments', static: false },
+    { key: 'cohortName', label: 'Cohort Name', static: false },
   ];
 
   const getOrderByFromKey = (key: keyof Row): CohortStatsOrderBy | null => {

@@ -195,6 +195,7 @@ export type Row = {
   interviews?: number;
   offers?: number;
   dailyCheck?: number;
+  cohortName?: string;
 };
 
 export type Ordering =
@@ -249,7 +250,7 @@ export interface CohortStats extends LeaderboardEntry {
   onlineAssessments: number;
   interviews: number;
   offers: number;
-  cohort: Cohort;
+  cohortName: string;
 }
 
 export interface RawPaginatedCohortStatsResponse {

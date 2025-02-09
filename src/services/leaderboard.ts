@@ -105,7 +105,7 @@ function deserializeCohortStats({
     dailyCheck: daily_checks,
     onlineAssessments: online_assessments,
     lastUpdated: new Date(),
-    cohort: deserializeCohortData(cohort),
+    cohortName: deserializeCohortData(cohort).name,
     ...rest,
   };
 }
