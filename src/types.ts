@@ -246,3 +246,17 @@ export interface CohortStats extends LeaderboardEntry {
   offers: number;
   cohort: Cohort;
 }
+
+export interface RawPaginatedCohortStatsResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: RawCohortStats[];
+}
+
+export interface PaginatedCohortStatsResponse {
+  next: string | null;
+  previous: string | null;
+  data: CohortStats[];
+  count: number;
+}

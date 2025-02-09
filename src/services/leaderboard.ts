@@ -18,8 +18,14 @@ import {
   RawPaginatedAttendanceResponse,
   PaginatedAttendanceResponse,
   PaginatedLeaderboardResponse,
+  CohortStatsOrderBy,
+  RawPaginatedCohortStatsResponse,
+  PaginatedCohortStatsResponse,
+  RawCohortStats,
+  CohortStats,
 } from '../types';
 import { devPrint } from '../components/utils/RandomUtils';
+import { deserializeCohortData } from './cohort';
 
 function deserializeLeetCodeStats({
   user: { username },
@@ -83,6 +89,33 @@ function deserializePaginatedAttendanceResponse({
 }: RawPaginatedAttendanceResponse): PaginatedAttendanceResponse {
   return {
     data: results.map(deserializeAttendanceStats),
+    ...rest,
+  };
+}
+
+function deserializeCohortStats({
+  member: { username },
+  daily_check,
+  online_assessments,
+  cohort,
+  ...rest
+}: RawCohortStats): CohortStats {
+  return {
+    username,
+    dailyCheck: daily_check,
+    onlineAssessments: online_assessments,
+    lastUpdated: new Date(),
+    cohort: deserializeCohortData(cohort),
+    ...rest,
+  };
+}
+
+function deserializePaginatedCohortStatsResponse({
+  results,
+  ...rest
+}: RawPaginatedCohortStatsResponse): PaginatedCohortStatsResponse {
+  return {
+    data: results.map(deserializeCohortStats),
     ...rest,
   };
 }
@@ -184,6 +217,31 @@ export function getAttendanceLeaderboard(
     .catch(devPrint);
 }
 
+export const COHORT_PAGE_SIZE = 50;
+
+export function getCohortStatsLeaderboard(
+  orderBy: CohortStatsOrderBy = CohortStatsOrderBy.DailyCheck,
+  page: number = 1,
+  pageSize: number = COHORT_PAGE_SIZE
+) {
+  return api
+    .get(
+      `/leaderboard/cohorts/?order_by=${orderBy}&page=${page}&page_size=${pageSize}`
+    )
+    .then((res) => {
+      if (res.status !== 200) {
+        throw new Error('Failed to get cohort stats leaderboard');
+      }
+
+      const deserializedResponse = deserializePaginatedCohortStatsResponse(
+        res.data
+      );
+
+      return deserializedResponse;
+    })
+    .catch(devPrint);
+}
+
 export const getLeaderboardDataHandlerFromType = (
   type: LeaderboardType
 ): LeaderboardDataHandler => {
@@ -198,6 +256,8 @@ export const getLeaderboardDataHandlerFromType = (
       return getNewGradLeaderboard as LeaderboardDataHandler;
     case LeaderboardType.Attendance:
       return getAttendanceLeaderboard as LeaderboardDataHandler;
+    case LeaderboardType.CohortStats:
+      return getCohortStatsLeaderboard as LeaderboardDataHandler;
     default:
       throw new Error('Invalid leaderboard type was provided');
   }
