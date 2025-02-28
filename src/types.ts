@@ -91,6 +91,15 @@ export interface LeetCodeStats extends LeaderboardEntry {
   hardSolved: number;
 }
 
+export type RawLeetcodeStats = Record<string, number>;
+export type RawGithubStats = Record<string, number>;
+
+export interface UserStats {
+  leetcode: RawLeetcodeStats;
+  github: RawGithubStats;
+}
+
+
 export interface RawApplicationStats {
   user: {
     username: string;
