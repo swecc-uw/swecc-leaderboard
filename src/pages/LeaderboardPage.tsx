@@ -60,11 +60,14 @@ const LeaderboardPage: React.FC = () => {
       type: LeaderboardType.Attendance,
       tabLabel: 'Attendance',
     },
-    {
+  ];
+
+  if (import.meta.env.DEV) {
+    includedLeaderboards.push({
       type: LeaderboardType.CohortStats,
       tabLabel: 'Cohort Stats',
-    },
-  ];
+    });
+  }
 
   const handleTabChange = (index: number) => {
     setActiveTab(includedLeaderboards[index].type);
